@@ -1,15 +1,19 @@
 <template>
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div id="nav">
+      <router-link to="/">Dashboard</router-link> |
+      <router-link to="/search">Search</router-link>
+    </div>
+    <router-view />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import Search from './components/Search.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  // components: {
+  //   Search
+  // }
 }
 </script>
 
