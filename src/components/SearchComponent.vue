@@ -9,22 +9,28 @@ export default {
   data() {
     return {
       books: [],
-      searchTerms: "ayn rand"
+      searchTerms: "ayn rand",
+      API_KEY: "",
+      API_URL: ""
     }
   },
   methods: {
     requestData() {
 
+      console.log(this.API_URL);
+
       let terms = this.searchTerms.split(' ').join('+');
+      let query = `${this.API_URL}${terms}${this.API_KEY}`;
+      console.log(query);
       console.log(terms);
 
-      axios.get(`https://openlibrary.org/search.json?q=${terms}`)
+      axios.get(query)
         .then((res) => {
-          let books = res.data.docs;
+          let books = res.data.items;
 
-          if(books.length > 10) {
-            books.length = 10;
-          }
+          // if(books.length > 10) {
+          //   books.length = 10;
+          // }
 
           this.books = books;
 
@@ -39,6 +45,8 @@ export default {
     }
   },
   mounted() {
+    this.API_KEY = "&key=" + process.env.VUE_APP_API_KEY;
+    this.API_URL = process.env.VUE_APP_API_URL;
   }
 }
 </script>
@@ -48,7 +56,7 @@ export default {
   <button @click="requestData()">search</button>
   <ul>
     <li v-for="(book, index) in books" :key="index">
-      <BookComponent :title="book.title" :author="book.author_name[0]" :cover="book.cover_i"/>
+      <BookComponent :title="book.volumeInfo.title" :author="book.volumeInfo.authors[0]" :cover="book.volumeInfo.imageLinks.thumbnail"/>
     </li>
   </ul>
 </template>

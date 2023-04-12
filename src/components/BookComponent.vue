@@ -6,7 +6,7 @@ export default {
 
 <template>
 	<div class="book">
-		<img :src="'https://covers.openlibrary.org/b/id/' + this.cover + '-M.jpg'">
+		<img :src="this.cover">
 		<h5>{{ this.title }}</h5>
 		<em>{{ this.author }}</em>
 	</div>
