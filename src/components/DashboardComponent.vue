@@ -1,5 +1,6 @@
 <script>
   import BookComponent from './BookComponent.vue';
+  import axios from 'axios';
 
   export default {
     components: {
@@ -7,6 +8,7 @@
     },
     data() {
       return {
+        APP_API_URL: "",
         books: [
           {
             title: "The Fountainhead",
@@ -20,10 +22,23 @@
             author: "Ayn Rand",
             image: "http://books.google.com/books/content?id=KbGNEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
             pageCount: 260,
-            read: 102
+            read: 102,
           }
         ],
       }
+    },
+    methods: {
+      getBooks() {
+        axios.get(this.APP_API_URL)
+          .then((response) => {
+            this.books = response.data;
+          })
+      }
+    },
+    mounted() {
+      this.APP_API_URL = process.env.VUE_APP_LOCAL_API_URL;
+
+      this.getBooks();
     }
   }
 </script>
