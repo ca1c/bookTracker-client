@@ -17,24 +17,18 @@ export default {
   methods: {
     requestData() {
 
-      console.log(this.API_URL);
-
       let terms = this.searchTerms.split(' ').join('+');
       let query = `${this.API_URL}${terms}${this.API_KEY}`;
-      console.log(query);
-      console.log(terms);
 
       axios.get(query)
         .then((res) => {
           let books = res.data.items;
 
-          // if(books.length > 10) {
-          //   books.length = 10;
-          // }
+          if(books.length > 10) {
+            books.length = 10;
+          }
 
           this.books = books;
-
-          console.log(this.books)
         })
         .catch((err) => {
           console.log(err);
