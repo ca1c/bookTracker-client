@@ -9,27 +9,12 @@
     data() {
       return {
         APP_API_URL: "",
-        books: [
-          {
-            title: "The Fountainhead",
-            author: "Ayn Rand",
-            image: "http://books.google.com/books/content?id=qcDM4-3R168C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-            pageCount: 752,
-            read: 137,
-          },
-          {
-            title: "Anthem",
-            author: "Ayn Rand",
-            image: "http://books.google.com/books/content?id=KbGNEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
-            pageCount: 260,
-            read: 102,
-          }
-        ],
+        books: [],
       }
     },
     methods: {
       getBooks() {
-        axios.get(this.APP_API_URL)
+        axios.get(this.APP_API_URL + 'readBookDoc')
           .then((response) => {
             this.books = response.data;
           })

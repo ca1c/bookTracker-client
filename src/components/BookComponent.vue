@@ -1,14 +1,17 @@
 <script>
+import axios from 'axios';
+
 export default {
-	props: ['title', 'author', 'cover', 'progress', 'read', 'pageCount'],
+	props: ['title', 'author', 'cover', 'progress', 'read', 'pageCount', 'searching'],
 	data() {
 		return {
 			edit: false,
 			error: false,
-			newPagesRead: "",
-			readState: "",
-			pageCountState: "",
+			newPagesRead: 0,
+			readState: 0,
+			pageCountState: 0,
 			progressAmt: "",
+			APP_API_URL: "",
 		}
 	},
 	methods: {
@@ -19,9 +22,9 @@ export default {
 			this.edit = this.edit ? false : true;
 		},
 		editRead() {
-			if(parseInt(this.newPagesRead) + parseInt(this.readState) <= parseInt(this.pageCountState)) {
+			if(parseInt(this.newPagesRead) + this.readState <= this.pageCountState) {
 				this.error = false;
-				this.readState = (parseInt(this.readState) + parseInt(this.newPagesRead)).toString();
+				this.readState = (this.readState + parseInt(this.newPagesRead));
 				this.updateProgressAmt();
 			}
 			else {
@@ -29,14 +32,30 @@ export default {
 			}
 		},
 		finishBook() {
-			let pagesLeft = parseInt(this.pageCountState) - parseInt(this.readState);
-			this.readState = parseInt(this.readState) + pagesLeft;
+			let pagesLeft = this.pageCountState - this.readState;
+			this.readState = this.readState + pagesLeft;
 			this.updateProgressAmt();
+		},
+		addBook() {
+			axios.post(this.APP_API_URL + 'addBook', {
+				title: this.title,
+				author: this.author,
+				image: this.cover,
+				pageCount: this.pageCount,
+				read: "0"
+			})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((err) => {
+				console.log(err);
+			})
 		}
 	},
 	mounted() {
-		this.readState = this.read;
-		this.pageCountState = this.pageCount;
+		this.APP_API_URL = process.env.VUE_APP_LOCAL_API_URL
+		this.readState = parseInt(this.read);
+		this.pageCountState = parseInt(this.pageCount);
 		this.updateProgressAmt();
 		console.log(this.progressAmt);
 	}
@@ -57,9 +76,12 @@ export default {
 			<div class="edit" v-if="this.edit">
 				<p>Add Pages Read:</p>
 				<p v-if="this.error" :style="{ color: 'red' }">Too Many Pages!</p>
-				<input type="text" :value="this.newPagesRead" @input="event => this.newPagesRead = event.target.value">
+				<input type="number" :value="this.newPagesRead" @input="event => this.newPagesRead = event.target.value">
 				<button @click="this.editRead">submit</button>
 			</div>
+		</div>
+		<div v-if="this.searching">
+			<button @click="this.addBook">Add</button>
 		</div>
 	</div>
 </template>

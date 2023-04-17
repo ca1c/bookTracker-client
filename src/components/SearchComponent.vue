@@ -1,8 +1,10 @@
 <script>
 import axios from 'axios';
 import BookComponent from './BookComponent.vue';
+import _ from 'lodash';
 
 export default {
+
   components: {
     BookComponent
   },
@@ -36,6 +38,9 @@ export default {
         .finally(() => {
           console.log("request attempted");
         })
+    },
+    getValue(object, string, defaultValue = '') {
+      return _.get(object, string, defaultValue)
     }
   },
   mounted() {
@@ -50,7 +55,13 @@ export default {
   <button @click="requestData()">search</button>
   <ul>
     <li v-for="(book, index) in books" :key="index">
-      <BookComponent :title="book.volumeInfo.title" :author="book.volumeInfo.authors[0]" :cover="book.volumeInfo.imageLinks.thumbnail"/>
+      <BookComponent 
+        :title="book.volumeInfo.title" 
+        :author="getValue(book.volumeInfo, 'authors[0]')" 
+        :cover="getValue(book.volumeInfo, 'imageLinks.thumbnail')" 
+        :pageCount="getValue(book.volumeInfo, 'pageCount.toString()')" 
+        :searching="true"
+      />
     </li>
   </ul>
 </template>
