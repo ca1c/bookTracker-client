@@ -20,7 +20,7 @@ export default {
     requestData() {
 
       let terms = this.searchTerms.split(' ').join('+');
-      let query = `${this.API_URL}${terms}${this.API_KEY}`;
+      let query = `http://localhost:3000/searchBook?q=${terms}`;
 
       axios.get(query)
         .then((res) => {
