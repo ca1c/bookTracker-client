@@ -18,6 +18,9 @@
           .then((response) => {
             this.books = response.data;
           })
+      },
+      deleteBook(i) {
+        this.books.splice(this.books.indexOf(i), 1);
       }
     },
     mounted() {
@@ -32,7 +35,8 @@
   <h1>Dashboard</h1>
   <ul>
     <li v-for="(book, index) in this.books" :key="index">
-      <BookComponent :title="book.title" :author="book.author" :cover="book.image" progress="true" :read="book.read" :pageCount="book.pageCount"/>
+      <BookComponent :title="book.title" :author="book.author" :cover="book.image" progress="true" :read="book.read" :pageCount="book.pageCount" :keyId="index"
+        :deleteFunc="deleteBook"/>
     </li>
   </ul>
 </template>

@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 export default {
-	props: ['title', 'author', 'cover', 'progress', 'read', 'pageCount', 'searching'],
+	props: ['title', 'author', 'cover', 'progress', 'read', 'pageCount', 'searching', 'keyId', 'deleteFunc'],
 	data() {
 		return {
 			edit: false,
@@ -50,6 +50,18 @@ export default {
 			.catch((err) => {
 				console.log(err);
 			})
+		},
+		deleteBook() {
+			axios.post(this.APP_API_URL + 'deleteBook', {
+				title: this.title
+			})
+			.then((response) => {
+				console.log(response);
+				this.$parent.deleteBook(this.keyId);
+			})
+			.catch((err) => {
+				console.log(err);
+			})
 		}
 	},
 	mounted() {
@@ -73,6 +85,7 @@ export default {
 			<div class="progressString">Pages Read: {{ this.readState }} / {{ this.pageCountState }}</div>
 			<button @click="this.toggleEdit">Edit</button>
 			<button @click="this.finishBook">Finish</button>
+			<button @click="this.deleteBook">Delete</button>
 			<div class="edit" v-if="this.edit">
 				<p>Add Pages Read:</p>
 				<p v-if="this.error" :style="{ color: 'red' }">Too Many Pages!</p>

@@ -42,7 +42,7 @@ export default {
         })
     },
     getValue(object, string, defaultValue = '') {
-      return _.get(object, string, defaultValue)
+      return _.get(object, string, defaultValue);
     }
   },
   mounted() {
