@@ -30,7 +30,9 @@ export default {
             books.length = 10;
           }
 
-          this.books = books;
+          this.books = books.filter(book => typeof book.volumeInfo.pageCount !== 'undefined');
+
+          console.log(this.books)
         })
         .catch((err) => {
           console.log(err);
@@ -59,7 +61,7 @@ export default {
         :title="book.volumeInfo.title" 
         :author="getValue(book.volumeInfo, 'authors[0]')" 
         :cover="getValue(book.volumeInfo, 'imageLinks.thumbnail')" 
-        :pageCount="getValue(book.volumeInfo, 'pageCount.toString()')" 
+        :pageCount="getValue(book.volumeInfo, 'pageCount')" 
         :searching="true"
       />
     </li>
