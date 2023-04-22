@@ -1,8 +1,6 @@
 <script>
-import axios from 'axios';
-
 export default {
-	props: ['title', 'author', 'cover', 'progress', 'read', 'pageCount', 'searching', 'keyId', 'deleteFunc'],
+	props: ['title', 'author', 'cover', 'progress', 'read', 'pageCount', 'searching', 'keyId'],
 	data() {
 		return {
 			edit: false,
@@ -26,6 +24,7 @@ export default {
 				this.error = false;
 				this.readState = (this.readState + parseInt(this.newPagesRead));
 				this.updateProgressAmt();
+				this.$parent.editBook(this.keyId, this.readState);
 			}
 			else {
 				this.error = true;
@@ -35,33 +34,13 @@ export default {
 			let pagesLeft = this.pageCountState - this.readState;
 			this.readState = this.readState + pagesLeft;
 			this.updateProgressAmt();
+			this.$parent.editBook(this.keyId, this.readState);
 		},
 		addBook() {
-			axios.post(this.APP_API_URL + 'addBook', {
-				title: this.title,
-				author: this.author,
-				image: this.cover,
-				pageCount: this.pageCount,
-				read: "0"
-			})
-			.then((response) => {
-				console.log(response);
-			})
-			.catch((err) => {
-				console.log(err);
-			})
+			this.$parent.addBook(this.keyId);
 		},
 		deleteBook() {
-			axios.post(this.APP_API_URL + 'deleteBook', {
-				title: this.title
-			})
-			.then((response) => {
-				console.log(response);
-				this.$parent.deleteBook(this.keyId);
-			})
-			.catch((err) => {
-				console.log(err);
-			})
+			this.$parent.deleteBook(this.keyId);
 		}
 	},
 	mounted() {

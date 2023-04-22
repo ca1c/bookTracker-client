@@ -43,11 +43,26 @@ export default {
     },
     getValue(object, string, defaultValue = '') {
       return _.get(object, string, defaultValue);
-    }
+    },
+    addBook(i) {
+      let book = this.books[i];
+      axios.post(this.APP_API_URL + 'addBook', {
+        title: book.volumeInfo.title,
+        author: book.volumeInfo.author,
+        image: book.volumeInfo.imageLinks.thumbnail,
+        pageCount: book.volumeInfo.pageCount,
+        read: "0"
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    },
   },
   mounted() {
-    this.API_KEY = "&key=" + process.env.VUE_APP_API_KEY;
-    this.API_URL = process.env.VUE_APP_API_URL;
+    this.APP_API_URL = process.env.VUE_APP_LOCAL_API_URL;
   }
 }
 </script>
@@ -63,6 +78,7 @@ export default {
         :cover="getValue(book.volumeInfo, 'imageLinks.thumbnail')" 
         :pageCount="getValue(book.volumeInfo, 'pageCount')" 
         :searching="true"
+        :keyId="index"
       />
     </li>
   </ul>
