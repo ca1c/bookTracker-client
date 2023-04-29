@@ -24,7 +24,7 @@
         let book = this.books[i];
         axios.post(this.APP_API_URL + 'editBook', {
           _id: book._id,
-          progress: progress
+          progress: progress.toString(),
         })
         .then((response) => {
           console.log(response);
