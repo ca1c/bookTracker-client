@@ -14,13 +14,13 @@ import { useCookies } from "vue3-cookies";
       })
       .then((response) => {
         console.log(response);
+        
         console.log(this.cookies.get('user'));
-        this.cookies.remove('user', {path: '/'});
       })
       .catch((error) => {
         console.log(error);
       })
-
+      this.cookies.remove('user', {path: '/'});
       this.$router.push({path: '/login'});
     }
   }

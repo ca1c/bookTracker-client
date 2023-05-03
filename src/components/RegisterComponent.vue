@@ -50,7 +50,38 @@ import { useCookies } from "vue3-cookies";
 </script>
 
 <template>
-    <h1>Register</h1>
+    <v-container>
+        
+        <v-sheet width="300" class="mx-auto">
+            <p class="text-h4 text-center">Register</p>
+            <v-card elevation="3">
+                <v-form fast-fail @submit.prevent>
+                    <v-text-field
+                        v-model="email"
+                        label="email"
+                        type="email"
+                        :rules="emailRules"
+                    ></v-text-field>
+
+                    <v-text-field
+                        v-model="username"
+                        label="username"
+                        :rules="usernameRules"
+                    ></v-text-field>
+
+                    <v-text-field
+                        v-model="password"
+                        label="password"
+                        type="password"
+                        :rules="passwordRules"
+                    ></v-text-field>
+
+                    <v-btn type="submit" block class="mt-2" @click="this.submit">Submit</v-btn>
+                </v-form>
+            </v-card>
+        </v-sheet>
+    </v-container>
+    <!-- <h1>Register</h1>
     <form class="form" @submit.prevent="onSubmit">
         <label>email:</label>
         <input type="email" @input="event => this.email = event.target.value">
@@ -59,7 +90,7 @@ import { useCookies } from "vue3-cookies";
         <label>password</label>
         <input type="password" @input="event => this.password = event.target.value">
         <button type="submit" @click="this.submit">register</button>
-    </form>
+    </form> -->
 </template>
 
 <style>

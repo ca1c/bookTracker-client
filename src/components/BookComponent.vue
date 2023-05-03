@@ -14,7 +14,7 @@ export default {
 	},
 	methods: {
 		updateProgressAmt() {
-			this.progressAmt = Math.floor((this.readState / this.pageCountState) * 150).toString() + 'px';
+			this.progressAmt = Math.floor((this.readState / this.pageCountState) * 100).toString();
 		},
 		toggleEdit() {
 			this.edit = this.edit ? false : true;
@@ -54,34 +54,90 @@ export default {
 </script>
 
 <template>
-	<div class="book">
-		<img :src="this.cover">
-		<h5>{{ this.title }}</h5>
-		<em>{{ this.author }}</em>
-		<div v-if="this.progress" class="progress">
-			<div class="progressFg" :style="{ width: this.progressAmt }"></div>
-			<div class="progressBg"></div>
-			<div class="progressString">Pages Read: {{ this.readState }} / {{ this.pageCountState }}</div>
-			<button @click="this.toggleEdit">Edit</button>
-			<button @click="this.finishBook">Finish</button>
-			<button @click="this.deleteBook">Delete</button>
-			<div class="edit" v-if="this.edit">
-				<p>Add Pages Read:</p>
-				<p v-if="this.error" :style="{ color: 'red' }">Too Many Pages!</p>
-				<input type="number" :value="this.newPagesRead" @input="event => this.newPagesRead = event.target.value">
-				<button @click="this.editRead">submit</button>
+	<v-container>
+		<v-card elevation="3">
+		<div class="book">
+			<v-avatar
+                class="ma-3"
+                size="200"
+                rounded="0"
+              >
+                <v-img :src="this.cover"></v-img>
+            </v-avatar>
+			<v-card-title>{{ this.title }}</v-card-title>
+			<v-card-subtitle>{{ this.author }}</v-card-subtitle>
+			<div v-if="this.progress" class="progress">
+				<v-card-text>
+					<v-progress-linear
+						v-model="progressAmt"
+						color="blue-grey"
+						height="25"
+					>
+						<template v-slot:default="{ value }">
+							<strong>{{ Math.ceil(value) }}%</strong>
+						</template>
+					</v-progress-linear>
+					<!-- <div class="progressFg" :style="{ width: this.progressAmt }"></div> -->
+					<!-- <div class="progressBg"></div> -->
+					<div class="progressString">Pages Read: {{ this.readState }} / {{ this.pageCountState }}</div>
+				</v-card-text>
+				<v-card-actions>
+					<v-btn elevation="3" color="primary" @click="this.toggleEdit">Edit</v-btn>
+					<v-btn elevation="3" color="primary" @click="this.finishBook">Finish</v-btn>
+					<v-btn elevation="3" color="primary" @click="this.deleteBook">Delete</v-btn>
+				</v-card-actions>
+				<!-- <button @click="this.toggleEdit">Edit</button>
+				<button @click="this.finishBook">Finish</button>
+				<button @click="this.deleteBook">Delete</button> -->
+
+				<div class="edit" v-if="this.edit">
+					<v-card-text>
+						<p class="text-h6">Add Pages Read:</p>
+						<!-- <p v-if="this.error" :style="{ color: 'red' }">Too Many Pages!</p> -->
+						<v-alert
+							v-if="this.error"
+							type="error"
+							text="Too Many Pages!"
+						></v-alert>
+						<!-- <input type="number" :value="this.newPagesRead" @input="event => this.newPagesRead = event.target.value">
+						<button @click="this.editRead">submit</button> -->
+						<v-row>
+							<v-col
+							cols="12"
+							md="6"
+							>
+								<v-text-field
+									v-model="newPagesRead"
+									type="number"
+									label="search"
+								></v-text-field>
+							</v-col>
+
+							<v-col
+							cols="12"
+							md="6"
+							>
+								<v-btn class="mt-2" @click="this.editRead">Submit</v-btn>
+							</v-col>
+						</v-row>
+					</v-card-text>
+				</div>
 			</div>
+			<div v-if="this.searching">
+				<v-card-actions>
+					<v-btn block color="primary" elevation="3" @click="this.addBook">Add</v-btn>
+				</v-card-actions>
+			</div>
+
 		</div>
-		<div v-if="this.searching">
-			<button @click="this.addBook">Add</button>
-		</div>
-	</div>
+		</v-card>
+	</v-container>
 </template>
 
 <style>
 .book {
 	padding: 10px;
-	border: 1px solid black;
+	/* border: 1px solid black; */
 }
 .progress {
 	position: relative;

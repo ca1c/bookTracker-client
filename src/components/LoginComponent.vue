@@ -27,6 +27,7 @@ export default {
             .then((response) => {
                 if(response.data.user) {
                     this.cookies.set("user", response.data.user, '1d');
+                    this.$router.push({path: '/'});
                 }
                 
                 console.log(response);
@@ -43,8 +44,8 @@ export default {
             axios.post(this.APP_API_URL + 'authenticateFront', {
                 id: this.cookies.get("user"),
             }).then((response) => {
+                console.log(response);
                 if(response.data.session) {
-                    console.log('ran');
                     this.$router.push({path: '/'});
                 }
                 console.log(response);
@@ -58,14 +59,37 @@ export default {
 </script>
 
 <template>
-    <h1>Login</h1>
-    <form class="form" @submit.prevent="onSubmit">
+    <v-container>
+        <p class="text-h4 text-center">Login</p>
+        <v-sheet width="300" class="mx-auto">
+            <v-card elevation="3">
+                <v-form fast-fail @submit.prevent>
+                <v-text-field
+                    v-model="username"
+                    label="username"
+                    :rules="usernameRules"
+                ></v-text-field>
+
+                <v-text-field
+                    v-model="password"
+                    label="password"
+                    type="password"
+                    :rules="passwordRules"
+                ></v-text-field>
+
+                <v-btn type="submit" block class="mt-2" @click="this.submit">Submit</v-btn>
+                </v-form>
+            </v-card>
+        </v-sheet>
+    </v-container>
+
+    <!-- <form class="form" @submit.prevent="onSubmit">
         <label>username:</label>
         <input type="text" @input="event => this.username = event.target.value">
         <label>password</label>
         <input type="password" @input="event => this.password = event.target.value">
         <button type="submit" @click="this.submit">Login</button>
-    </form>
+    </form> -->
 </template>
 
 <style>

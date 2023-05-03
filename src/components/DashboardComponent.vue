@@ -57,11 +57,13 @@
 </script>
 
 <template>
-  <h1>Dashboard</h1>
-  <ul>
-    <li v-for="(book, index) in this.books" :key="index">
-      <BookComponent :title="book.title" :author="book.author" :cover="book.image" progress="true" :read="book.read" :pageCount="book.pageCount" :keyId="index"
-        :deleteFunc="deleteBook"/>
-    </li>
-  </ul>
+  <v-container>
+    <p class="text-h4">Dashboard</p>
+    <ul>
+      <li v-for="(book, index) in this.books" :key="index">
+        <BookComponent :title="book.title" :author="book.author" :cover="book.image" progress="true" :read="book.read" :pageCount="book.pageCount" :keyId="index"
+          :deleteFunc="deleteBook"/>
+      </li>
+    </ul>
+  </v-container>
 </template>

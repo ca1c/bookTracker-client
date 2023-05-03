@@ -48,7 +48,7 @@ export default {
       let book = this.books[i];
       axios.post(this.APP_API_URL + 'addBook', {
         title: book.volumeInfo.title,
-        author: book.volumeInfo.author,
+        author: book.volumeInfo.authors[0],
         image: book.volumeInfo.imageLinks.thumbnail,
         pageCount: book.volumeInfo.pageCount,
         read: "0"
@@ -68,20 +68,47 @@ export default {
 </script>
 
 <template>
-  <input type="text" :value="this.searchTerms" @input="event => this.searchTerms = event.target.value">
-  <button @click="requestData()">search</button>
-  <ul>
-    <li v-for="(book, index) in books" :key="index">
-      <BookComponent 
-        :title="book.volumeInfo.title" 
-        :author="getValue(book.volumeInfo, 'authors[0]')" 
-        :cover="getValue(book.volumeInfo, 'imageLinks.thumbnail')" 
-        :pageCount="getValue(book.volumeInfo, 'pageCount')" 
-        :searching="true"
-        :keyId="index"
-      />
-    </li>
-  </ul>
+  <v-container>
+    <p class="text-h4">Search</p>
+    <v-sheet width="500" class="mx-auto">
+    <v-form v-model="valid">
+      <v-container>
+        <v-row>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="searchTerms"
+              label="search"
+            ></v-text-field>
+          </v-col>
+
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-btn block class="mt-2" @click="requestData()">Submit</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-form>
+    </v-sheet>
+    <!-- <input type="text" :value="this.searchTerms" @input="event => this.searchTerms = event.target.value">
+    <button @click="requestData()">search</button> -->
+    <ul>
+      <li v-for="(book, index) in books" :key="index">
+        <BookComponent 
+          :title="book.volumeInfo.title" 
+          :author="getValue(book.volumeInfo, 'authors[0]')" 
+          :cover="getValue(book.volumeInfo, 'imageLinks.thumbnail')" 
+          :pageCount="getValue(book.volumeInfo, 'pageCount')" 
+          :searching="true"
+          :keyId="index"
+        />
+      </li>
+    </ul>
+  </v-container>
 </template>
 
 <style scoped>
