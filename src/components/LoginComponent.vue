@@ -17,7 +17,7 @@ export default {
     methods: {
         submit() {
             if(this.cookies.get('user')){
-                this.cookies.remove('user');
+                this.cookies.remove('user', {path: '/'});
             }
             
             axios.post(this.APP_API_URL + 'login', {

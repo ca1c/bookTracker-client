@@ -9,14 +9,13 @@ import { useCookies } from "vue3-cookies";
     },
     mounted() {
       this.APP_API_URL = process.env.VUE_APP_LOCAL_API_URL;
-      let vm = this;
       axios.post(this.APP_API_URL + 'logout', {
         id: this.cookies.get('user'),
       })
       .then((response) => {
         console.log(response);
         console.log(this.cookies.get('user'));
-        vm.cookies.remove('user');
+        this.cookies.remove('user', {path: '/'});
       })
       .catch((error) => {
         console.log(error);
