@@ -19,12 +19,34 @@ globalCookiesConfig({
   sameSite: "None",
 });
 
+const myCustomDarkTheme = {
+  dark: true,
+  colors: {
+    background: '#121113',
+    surface: '#222725',
+    primary: '#F7F7F2',
+    'primary-darken-1': '#d9d9d4',
+    secondary: '#E4E6C3',
+    'secondary-darken-1': '#b8ba9c',
+    error: '#B00020',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FB8C00',
+  }
+}
+
 const vuetify = createVuetify({
+  theme: {
+    defaultTheme: 'myCustomDarkTheme',
+    themes: {
+      myCustomDarkTheme,
+    }
+  },
   components,
   directives,
   icons: {
     defaultSet: 'mdi',
-  }
+  },
 })
 
 const app = createApp(App);

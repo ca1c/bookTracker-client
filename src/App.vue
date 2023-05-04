@@ -1,6 +1,6 @@
 <template>
     <v-app>
-      <v-toolbar color="primary">
+      <v-toolbar color="surface">
 
         <v-toolbar-title>myBook</v-toolbar-title>
 

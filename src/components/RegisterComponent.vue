@@ -50,6 +50,7 @@ import { useCookies } from "vue3-cookies";
 </script>
 
 <template>
+    <v-app>
     <v-container>
         
         <v-sheet width="300" class="mx-auto">
@@ -81,6 +82,7 @@ import { useCookies } from "vue3-cookies";
             </v-card>
         </v-sheet>
     </v-container>
+    </v-app>
     <!-- <h1>Register</h1>
     <form class="form" @submit.prevent="onSubmit">
         <label>email:</label>

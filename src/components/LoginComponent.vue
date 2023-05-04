@@ -59,6 +59,7 @@ export default {
 </script>
 
 <template>
+    <v-app>
     <v-container>
         <p class="text-h4 text-center">Login</p>
         <v-sheet width="300" class="mx-auto">
@@ -82,6 +83,7 @@ export default {
             </v-card>
         </v-sheet>
     </v-container>
+    </v-app>
 
     <!-- <form class="form" @submit.prevent="onSubmit">
         <label>username:</label>

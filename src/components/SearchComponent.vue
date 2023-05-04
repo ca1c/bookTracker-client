@@ -70,7 +70,7 @@ export default {
 <template>
   <v-container>
     <p class="text-h4">Search</p>
-    <v-sheet width="500" class="mx-auto">
+    <v-sheet max-width="500" class="mx-auto">
     <v-form v-model="valid">
       <v-container>
         <v-row>

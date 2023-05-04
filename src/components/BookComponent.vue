@@ -24,7 +24,7 @@ export default {
 				this.error = false;
 				this.readState = (this.readState + parseInt(this.newPagesRead));
 				this.updateProgressAmt();
-				this.$parent.editBook(this.keyId, this.readState);
+				this.$parent.$parent.editBook(this.keyId, this.readState);
 			}
 			else {
 				this.error = true;
@@ -34,13 +34,13 @@ export default {
 			let pagesLeft = this.pageCountState - this.readState;
 			this.readState = this.readState + pagesLeft;
 			this.updateProgressAmt();
-			this.$parent.editBook(this.keyId, this.readState);
+			this.$parent.$parent.editBook(this.keyId, this.readState);
 		},
 		addBook() {
-			this.$parent.addBook(this.keyId);
+			this.$parent.$parent.addBook(this.keyId);
 		},
 		deleteBook() {
-			this.$parent.deleteBook(this.keyId);
+			this.$parent.$parent.deleteBook(this.keyId);
 		}
 	},
 	mounted() {
@@ -69,9 +69,9 @@ export default {
 			<div v-if="this.progress" class="progress">
 				<v-card-text>
 					<v-progress-linear
-						v-model="progressAmt"
-						color="blue-grey"
+						v-model="this.progressAmt"
 						height="25"
+						color="secondary"
 					>
 						<template v-slot:default="{ value }">
 							<strong>{{ Math.ceil(value) }}%</strong>
@@ -82,9 +82,9 @@ export default {
 					<div class="progressString">Pages Read: {{ this.readState }} / {{ this.pageCountState }}</div>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn elevation="3" color="primary" @click="this.toggleEdit">Edit</v-btn>
-					<v-btn elevation="3" color="primary" @click="this.finishBook">Finish</v-btn>
-					<v-btn elevation="3" color="primary" @click="this.deleteBook">Delete</v-btn>
+					<v-btn elevation="3" color="secondary" @click="this.toggleEdit">Edit</v-btn>
+					<v-btn elevation="3" color="#E4E6C3" @click="this.finishBook">Finish</v-btn>
+					<v-btn elevation="3" color="#E4E6C3" @click="this.deleteBook">Delete</v-btn>
 				</v-card-actions>
 				<!-- <button @click="this.toggleEdit">Edit</button>
 				<button @click="this.finishBook">Finish</button>
