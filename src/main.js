@@ -18,12 +18,15 @@ globalCookiesConfig({
   secure: true,
   sameSite: "None",
 });
+//#899878
+// #222725
 
 const myCustomDarkTheme = {
   dark: true,
   colors: {
     background: '#121113',
     surface: '#222725',
+    'surface-lighten-1': '#899878',
     primary: '#F7F7F2',
     'primary-darken-1': '#d9d9d4',
     secondary: '#E4E6C3',

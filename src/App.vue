@@ -6,13 +6,13 @@
 
         <v-spacer></v-spacer>
         <v-tabs>
-          <router-link to="/" style="text-decoration: none; color: inherit;">
-            <v-tab value="one" ><v-icon>mdi-book-open-variant</v-icon></v-tab>
-          </router-link>
-          <router-link to="/search" style="text-decoration: none; color: inherit;">
-            <v-tab value="two"><v-icon>mdi-magnify</v-icon></v-tab>
-          </router-link>
           <div v-if="this.cookies.get('user')">
+            <router-link to="/" style="text-decoration: none; color: inherit;">
+              <v-tab value="one" ><v-icon>mdi-book-open-variant</v-icon></v-tab>
+            </router-link>
+            <router-link to="/search" style="text-decoration: none; color: inherit;">
+              <v-tab value="two"><v-icon>mdi-magnify</v-icon></v-tab>
+            </router-link>
             <router-link to="/logout" style="text-decoration: none; color: inherit;">
               <v-tab value="five"><v-icon>mdi-logout-variant</v-icon></v-tab>
             </router-link>
@@ -28,6 +28,25 @@
         </v-tabs>
       </v-toolbar>
       <router-view :key="$route.fullPath"/>
+
+      <v-footer color="surface" class="text-center d-flex flex-column" app="true">
+        <div>
+          Made with ⚡ by 
+        </div>
+        <div>
+          <v-btn
+            append-icon="mdi-github"
+            href="https://github.com/ca1c"
+          >
+
+            ca1c
+
+            <template v-slot:append>
+              <v-icon></v-icon>
+            </template>
+          </v-btn>
+        </div>
+      </v-footer>
     </v-app>
 </template>
 

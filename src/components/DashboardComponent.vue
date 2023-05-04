@@ -1,8 +1,13 @@
 <script>
   import BookComponent from './BookComponent.vue';
   import axios from 'axios';
+  import { useCookies } from "vue3-cookies";
 
   export default {
+    setup() {
+        const { cookies } = useCookies();
+        return { cookies };
+    },
     components: {
       BookComponent
     },
@@ -10,20 +15,24 @@
       return {
         APP_API_URL: "",
         books: [],
+        user: this.cookies.get("user") || undefined
       }
     },
     methods: {
       getBooks() {
-        axios.get(this.APP_API_URL + 'readBookDoc')
-          .then((response) => {
-            this.books = response.data;
-            console.log(response.data);
-          })
+        if(this.user) {
+          axios.get(`${this.APP_API_URL}readBookDoc?username=${this.user.username}`)
+            .then((response) => {
+              this.books = response.data;
+              console.log(response.data);
+            })
+        }
       },
       editBook(i, progress) {
         let book = this.books[i];
         axios.post(this.APP_API_URL + 'editBook', {
           _id: book._id,
+          username: this.user.username,
           progress: progress.toString(),
         })
         .then((response) => {
@@ -37,7 +46,8 @@
         let book = this.books[i];
         
         axios.post(this.APP_API_URL + 'deleteBook', {
-          _id: book._id
+          _id: book._id,
+          username: this.user.username
         })
         .then((response) => {
           console.log(response);
@@ -49,6 +59,10 @@
       },
     },
     mounted() {
+      if(!this.cookies.get("user")) {
+        this.$router.push({path: '/login'});
+      }
+
       this.APP_API_URL = process.env.VUE_APP_LOCAL_API_URL;
 
       this.getBooks();

@@ -2,9 +2,13 @@
 import axios from 'axios';
 import BookComponent from './BookComponent.vue';
 import _ from 'lodash';
+import { useCookies } from "vue3-cookies";
 
 export default {
-
+  setup() {
+      const { cookies } = useCookies();
+      return { cookies };
+  },
   components: {
     BookComponent
   },
@@ -45,23 +49,31 @@ export default {
       return _.get(object, string, defaultValue);
     },
     addBook(i) {
+      let user = this.cookies.get("user");
       let book = this.books[i];
-      axios.post(this.APP_API_URL + 'addBook', {
-        title: book.volumeInfo.title,
-        author: book.volumeInfo.authors[0],
-        image: book.volumeInfo.imageLinks.thumbnail,
-        pageCount: book.volumeInfo.pageCount,
-        read: "0"
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+      if(user.username) {
+        axios.post(this.APP_API_URL + 'addBook', {
+          username: user.username,
+          title: book.volumeInfo.title,
+          author: book.volumeInfo.authors[0],
+          image: book.volumeInfo.imageLinks.thumbnail,
+          pageCount: book.volumeInfo.pageCount,
+          read: "0"
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+      }
     },
   },
   mounted() {
+    if(!this.cookies.get("user")) {
+      this.$router.push({path: '/login'});
+    }
+
     this.APP_API_URL = process.env.VUE_APP_LOCAL_API_URL;
   }
 }

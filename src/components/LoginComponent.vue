@@ -26,7 +26,7 @@ export default {
             })
             .then((response) => {
                 if(response.data.user) {
-                    this.cookies.set("user", response.data.user, '1d');
+                    this.cookies.set("user", {username: response.data.username, id: response.data.user}, '1d');
                     this.$router.push({path: '/'});
                 }
                 
