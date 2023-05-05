@@ -1,6 +1,8 @@
 <script>
 import axios from 'axios';
 import { useCookies } from "vue3-cookies";
+import * as EmailValidator from 'email-validator';
+import * as passwordValidator from 'password-validator';
 
     export default {
         setup() {
@@ -11,8 +13,39 @@ import { useCookies } from "vue3-cookies";
             return {
                 APP_API_URL: "",
                 email: "",
+                emailRules: [
+                    value => {
+                        if (EmailValidator.validate(value)) return true
+
+                        return 'Please enter a valid Email.'
+                    },
+                ],
                 username: "",
+                usernameRules: [
+                    value => {
+                        if (value?.length > 2) return true
+
+                        return 'First name must be at least 3 characters.'
+                    },
+                ],
                 password: "",
+                passwordRules: [
+                    value => {
+                        const schema = new passwordValidator();
+
+                        schema
+                        .is().min(8)                                    // Minimum length 8
+                        .is().max(100)                                  // Maximum length 100
+                        .has().uppercase()                              // Must have uppercase letters
+                        .has().lowercase()                              // Must have lowercase letters
+                        .has().digits(1)                                // Must have at least 1 digits
+                        .has().not().spaces()                           // Should not have spaces
+
+                        if (schema.validate(value)) {console.log('ran'); return true}
+
+                        return 'Password should be 8 characters long, at least 1 digit, 1 uppercase and lowercase letter, no spaces'
+                    },
+                ],
             }
         },
         methods: {

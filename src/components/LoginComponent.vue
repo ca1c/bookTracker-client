@@ -68,14 +68,12 @@ export default {
                 <v-text-field
                     v-model="username"
                     label="username"
-                    :rules="usernameRules"
                 ></v-text-field>
 
                 <v-text-field
                     v-model="password"
                     label="password"
                     type="password"
-                    :rules="passwordRules"
                 ></v-text-field>
 
                 <v-btn type="submit" block class="mt-2" @click="this.submit">Submit</v-btn>
