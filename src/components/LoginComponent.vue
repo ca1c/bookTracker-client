@@ -45,7 +45,7 @@ export default {
                 if(response.data.user) {
                     this.error = false;
                     this.cookies.set("user", {username: response.data.username, id: response.data.user}, '1d');
-                    this.$router.push({path: '/'});
+                    this.$router.push({path: '/dashboard'});
                 }
                 
                 console.log(response);
@@ -64,7 +64,7 @@ export default {
             }).then((response) => {
                 console.log(response);
                 if(response.data.session) {
-                    this.$router.push({path: '/'});
+                    this.$router.push({path: '/dashboard'});
                 }
                 console.log(response);
             })

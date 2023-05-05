@@ -80,7 +80,7 @@ import * as passwordValidator from 'password-validator';
             }).then((response) => {
                 if(response.data.session) {
                     console.log('ran');
-                    this.$router.push({path: '/'});
+                    this.$router.push({path: '/dashboard'});
                 }
                 console.log(response);
             })

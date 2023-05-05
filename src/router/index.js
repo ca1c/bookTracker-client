@@ -4,10 +4,16 @@ import SearchComponent from '@/components/SearchComponent.vue';
 import LoginComponent from '@/components/LoginComponent.vue';
 import RegisterComponent from '@/components/RegisterComponent.vue';
 import LogoutComponent from '@/components/LogoutComponent.vue';
+import MainpageComponent from '@/components/MainpageComponent.vue';
 
 const routes = [
 	{
 		path: '/',
+		name: 'Mainpage',
+		component: MainpageComponent
+	},
+	{
+		path: '/dashboard',
 		name: 'Dashboard',
 		component: DashboardComponent
 	},
