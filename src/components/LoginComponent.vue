@@ -12,6 +12,8 @@ export default {
             APP_API_URL: "",
             username: "",
             password: "",
+            error: false,
+            errorMessage: "",
         }
     },
     methods: {
@@ -19,13 +21,29 @@ export default {
             if(this.cookies.get('user')){
                 this.cookies.remove('user', {path: '/'});
             }
+
+            if(this.username.length === 0) {
+                this.error = true;
+                this.errorMessage = "username required";
+                return;
+            }
+            if(this.password.length === 0) {
+                this.error = true;
+                this.errorMessage = "password required";
+                return;
+            }
             
             axios.post(this.APP_API_URL + 'login', {
                 username: this.username,
                 password: this.password,
             })
             .then((response) => {
+                if(response.data.error) {
+                    this.errorMessage = response.data.message;
+                    this.error = true;
+                }
                 if(response.data.user) {
+                    this.error = false;
                     this.cookies.set("user", {username: response.data.username, id: response.data.user}, '1d');
                     this.$router.push({path: '/'});
                 }
@@ -77,7 +95,14 @@ export default {
                 ></v-text-field>
 
                 <v-btn type="submit" block class="mt-2" @click="this.submit">Submit</v-btn>
+
                 </v-form>
+                <v-alert
+                    v-if="this.error"
+                    type="error"
+                    title="Error"
+                    :text="this.errorMessage"
+                ></v-alert>
             </v-card>
         </v-sheet>
     </v-container>

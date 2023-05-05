@@ -46,6 +46,8 @@ import * as passwordValidator from 'password-validator';
                         return 'Password should be 8 characters long, at least 1 digit, 1 uppercase and lowercase letter, no spaces'
                     },
                 ],
+                error: false,
+                errorMessage: "",
             }
         },
         methods: {
@@ -56,7 +58,14 @@ import * as passwordValidator from 'password-validator';
                     password: this.password,
                 })
                 .then((response) => {
-                    console.log(response);
+                    if(response.data.error) {
+                        this.errorMessage = response.data.message;
+                        this.error = true;
+                    }
+                    else {
+                        this.error = false;
+                        this.$router.push({path: '/login'});
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
@@ -112,6 +121,12 @@ import * as passwordValidator from 'password-validator';
 
                     <v-btn type="submit" block class="mt-2" @click="this.submit">Submit</v-btn>
                 </v-form>
+                <v-alert
+                    v-if="this.error"
+                    type="error"
+                    title="Error"
+                    :text="this.errorMessage"
+                ></v-alert>
             </v-card>
         </v-sheet>
     </v-container>
