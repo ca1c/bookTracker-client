@@ -2,12 +2,20 @@
     <v-app>
       <v-toolbar color="surface">
 
-        <v-toolbar-title>myBook</v-toolbar-title>
+        
+        <v-toolbar-title>
+          <router-link 
+            :to="this.cookies.get('user') ? '/dashboard' : '/'"
+            style="text-decoration: none; color: inherit;"
+            >
+              myBook
+            </router-link>
+        </v-toolbar-title>
 
         <v-spacer></v-spacer>
         <v-tabs>
           <div v-if="this.cookies.get('user')">
-            <router-link to="/" style="text-decoration: none; color: inherit;">
+            <router-link to="/dashboard" style="text-decoration: none; color: inherit;">
               <v-tab value="one" ><v-icon>mdi-book-open-variant</v-icon></v-tab>
             </router-link>
             <router-link to="/search" style="text-decoration: none; color: inherit;">
