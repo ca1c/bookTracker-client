@@ -15,23 +15,14 @@
         <v-spacer></v-spacer>
         <v-tabs>
           <div v-if="this.cookies.get('user')">
-            <router-link to="/dashboard" style="text-decoration: none; color: inherit;">
-              <v-tab value="one" ><v-icon>mdi-book-open-variant</v-icon></v-tab>
-            </router-link>
-            <router-link to="/search" style="text-decoration: none; color: inherit;">
-              <v-tab value="two"><v-icon>mdi-magnify</v-icon></v-tab>
-            </router-link>
-            <router-link to="/logout" style="text-decoration: none; color: inherit;">
-              <v-tab value="five"><v-icon>mdi-logout-variant</v-icon></v-tab>
-            </router-link>
+              <v-tab :value="1" to="/dashboard" replace><v-icon>mdi-book-open-variant</v-icon></v-tab>
+              <v-tab :value="2" to="/search" replace><v-icon>mdi-magnify</v-icon></v-tab>
+              <v-tab :value="3" to="/logout" replace><v-icon>mdi-logout-variant</v-icon></v-tab>
           </div>
           <div v-else>
-            <router-link to="/login" style="text-decoration: none; color: inherit;">
-              <v-tab value="three"><v-icon>mdi-login</v-icon></v-tab>
-            </router-link>
-            <router-link to="/register" style="text-decoration: none; color: inherit;">
-              <v-tab value="four"><v-icon>mdi-account-plus-outline</v-icon></v-tab>
-            </router-link>
+              <v-tab :value="1" to="/" replace><v-icon>mdi-home</v-icon></v-tab>
+              <v-tab :value="2" to="/login" replace><v-icon>mdi-login</v-icon></v-tab>
+              <v-tab :value="3" to="/register" replace><v-icon>mdi-account-plus-outline</v-icon></v-tab>
           </div>
         </v-tabs>
       </v-toolbar>
@@ -69,6 +60,7 @@ export default {
   },
   data() {
     return {
+      session: null,
     }
   },
   mounted() {
