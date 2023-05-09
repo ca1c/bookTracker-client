@@ -47,11 +47,33 @@ import * as passwordValidator from 'password-validator';
                     },
                 ],
                 error: false,
+                errorType: "error",
                 errorMessage: "",
             }
         },
         methods: {
+            validateForm() {
+                const schema = new passwordValidator();
+
+                schema
+                .is().min(8)                                    // Minimum length 8
+                .is().max(100)                                  // Maximum length 100
+                .has().uppercase()                              // Must have uppercase letters
+                .has().lowercase()                              // Must have lowercase letters
+                .has().digits(1)                                // Must have at least 1 digits
+                .has().not().spaces()                           // Should not have spaces
+
+                if (!schema.validate(this.password)) {console.log('ran'); return false}
+                if (!this.username?.length > 2) return false
+                if (!EmailValidator.validate(this.email)) return false
+
+                return true;
+            },
             submit() {
+                if(!this.validateForm()) {
+                    return;
+                }
+
                 axios.post(this.APP_API_URL + 'createUser', {
                     email: this.email,
                     username: this.username,
@@ -59,6 +81,13 @@ import * as passwordValidator from 'password-validator';
                 })
                 .then((response) => {
                     if(response.data.error) {
+                        if(response.data.message.includes("Confirmation")) {
+                            this.errorType = "success";
+                        }
+                        else {
+                            this.errorType = "error";
+                        }
+
                         this.errorMessage = response.data.message;
                         this.error = true;
                     }
@@ -123,8 +152,8 @@ import * as passwordValidator from 'password-validator';
                 </v-form>
                 <v-alert
                     v-if="this.error"
-                    type="error"
-                    title="Error"
+                    :type="this.errorType"
+                    title="Alert"
                     :text="this.errorMessage"
                 ></v-alert>
             </v-card>
