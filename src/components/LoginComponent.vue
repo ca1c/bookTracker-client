@@ -47,8 +47,6 @@ export default {
                     this.cookies.set("user", {username: response.data.username, id: response.data.user}, '1d');
                     this.$router.push({path: '/dashboard'});
                 }
-                
-                console.log(response);
             })
             .catch((err) => {
                 console.log(err);
@@ -66,7 +64,6 @@ export default {
                 if(response.data.session) {
                     this.$router.push({path: '/dashboard'});
                 }
-                console.log(response);
             })
             .catch((error) => {
                 console.log(error);
@@ -79,8 +76,8 @@ export default {
 <template>
     <v-app>
     <v-container>
-        <p class="text-h4 text-center">Login</p>
         <v-sheet width="300" class="mx-auto">
+            <p class="text-h4 text-center">Login</p>
             <v-card elevation="3">
                 <v-form fast-fail @submit.prevent>
                 <v-text-field

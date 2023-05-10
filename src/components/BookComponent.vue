@@ -24,7 +24,7 @@ export default {
 				this.error = false;
 				this.readState = (this.readState + parseInt(this.newPagesRead));
 				this.updateProgressAmt();
-				this.$parent.$parent.editBook(this.keyId, this.readState);
+				this.$parent.$parent.$parent.$parent.editBook(this.keyId, this.readState);
 			}
 			else {
 				this.error = true;
@@ -34,13 +34,13 @@ export default {
 			let pagesLeft = this.pageCountState - this.readState;
 			this.readState = this.readState + pagesLeft;
 			this.updateProgressAmt();
-			this.$parent.$parent.editBook(this.keyId, this.readState);
+			this.$parent.$parent.$parent.$parent.editBook(this.keyId, this.readState);
 		},
 		addBook() {
 			this.$parent.$parent.addBook(this.keyId);
 		},
 		deleteBook() {
-			this.$parent.$parent.deleteBook(this.keyId);
+			this.$parent.$parent.$parent.$parent.deleteBook(this.keyId);
 		}
 	},
 	mounted() {
@@ -48,7 +48,6 @@ export default {
 		this.readState = parseInt(this.read);
 		this.pageCountState = parseInt(this.pageCount);
 		this.updateProgressAmt();
-		console.log(this.progressAmt);
 	}
 }
 </script>

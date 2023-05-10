@@ -15,7 +15,7 @@ export default {
   data() {
     return {
       books: [],
-      searchTerms: "ayn rand",
+      searchTerms: "",
       API_KEY: "",
       API_URL: ""
     }
@@ -80,7 +80,7 @@ export default {
 </script>
 
 <template>
-  <v-container>
+  <v-container class="mb-16">
     <p class="text-h4">Search</p>
     <v-sheet max-width="500" class="mx-auto">
     <v-form v-model="valid">
@@ -92,7 +92,7 @@ export default {
           >
             <v-text-field
               v-model="searchTerms"
-              label="search"
+              label="search authors and books"
             ></v-text-field>
           </v-col>
 
@@ -108,8 +108,8 @@ export default {
     </v-sheet>
     <!-- <input type="text" :value="this.searchTerms" @input="event => this.searchTerms = event.target.value">
     <button @click="requestData()">search</button> -->
-    <ul>
-      <li v-for="(book, index) in books" :key="index">
+    <v-row>
+      <v-col cols="12" sm="6" md="4" v-for="(book, index) in this.books" :key="index">
         <BookComponent 
           :title="book.volumeInfo.title" 
           :author="getValue(book.volumeInfo, 'authors[0]')" 
@@ -118,8 +118,8 @@ export default {
           :searching="true"
           :keyId="index"
         />
-      </li>
-    </ul>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

@@ -41,11 +41,12 @@ import * as passwordValidator from 'password-validator';
                         .has().digits(1)                                // Must have at least 1 digits
                         .has().not().spaces()                           // Should not have spaces
 
-                        if (schema.validate(value)) {console.log('ran'); return true}
+                        if (schema.validate(value)) return true;
 
                         return 'Password should be 8 characters long, at least 1 digit, 1 uppercase and lowercase letter, no spaces'
                     },
                 ],
+                passwordConfirmation: "",
                 error: false,
                 errorType: "error",
                 errorMessage: "",
@@ -61,11 +62,17 @@ import * as passwordValidator from 'password-validator';
                 .has().uppercase()                              // Must have uppercase letters
                 .has().lowercase()                              // Must have lowercase letters
                 .has().digits(1)                                // Must have at least 1 digits
-                .has().not().spaces()                           // Should not have spaces
+                .has().not().spaces();                          // Should not have spaces
 
-                if (!schema.validate(this.password)) {console.log('ran'); return false}
-                if (!this.username?.length > 2) return false
-                if (!EmailValidator.validate(this.email)) return false
+                if (!schema.validate(this.password)) return false;
+                if (!this.username?.length > 2) return false;
+                if (!EmailValidator.validate(this.email)) return false;
+                if (this.password !== this.passwordConfirmation) {
+                    this.errorType = "error";
+                    this.errorMessage = "Passwords should match";
+                    this.error = true;
+                    return false;
+                }
 
                 return true;
             },
@@ -108,10 +115,8 @@ import * as passwordValidator from 'password-validator';
                 id: this.cookies.get("user"),
             }).then((response) => {
                 if(response.data.session) {
-                    console.log('ran');
                     this.$router.push({path: '/dashboard'});
                 }
-                console.log(response);
             })
             .catch((error) => {
                 console.log(error);
@@ -146,6 +151,12 @@ import * as passwordValidator from 'password-validator';
                         label="password"
                         type="password"
                         :rules="passwordRules"
+                    ></v-text-field>
+
+                    <v-text-field
+                        v-model="passwordConfirmation"
+                        label="confirm password"
+                        type="password"
                     ></v-text-field>
 
                     <v-btn type="submit" block class="mt-2" @click="this.submit">Submit</v-btn>

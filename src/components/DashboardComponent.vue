@@ -15,6 +15,8 @@
       return {
         APP_API_URL: "",
         books: [],
+        rows: 0,
+        emptyBooks: null,
         user: this.cookies.get("user") || undefined
       }
     },
@@ -24,7 +26,8 @@
           axios.get(`${this.APP_API_URL}readBookDoc?username=${this.user.username}`)
             .then((response) => {
               this.books = response.data;
-              console.log(response.data);
+              this.emptyBooks = this.books.length === 0;
+              this.rows = Math.ceil((this.books.length + 1) / 3);
             })
         }
       },
@@ -71,13 +74,17 @@
 </script>
 
 <template>
-  <v-container>
+  <v-container class="mb-16">
     <p class="text-h4">Dashboard</p>
-    <ul>
-      <li v-for="(book, index) in this.books" :key="index">
+    <div v-if="this.emptyBooks" class="text-center d-flex justify-center align-center text-h5 flex-column" style="min-height: 20vh;">
+      <p class="text-subtitle-1 font-weight-light">You Have No Books!</p>
+      <v-btn href="/search">Add Books</v-btn>
+    </div>
+    <v-row>
+      <v-col cols="12" sm="6" md="4" v-for="(book, index) in this.books" :key="index">
         <BookComponent :title="book.title" :author="book.author" :cover="book.image" progress="true" :read="book.read" :pageCount="book.pageCount" :keyId="index"
           :deleteFunc="deleteBook"/>
-      </li>
-    </ul>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
