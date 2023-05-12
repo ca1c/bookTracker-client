@@ -15,12 +15,23 @@ export default {
   data() {
     return {
       books: [],
+      pages: [],
+      pageSize: 9,
+      page: 1,
       searchTerms: "",
       API_KEY: "",
       API_URL: ""
     }
   },
   methods: {
+    makePages() {
+      let pages = [];
+      for(let i = 0; i < this.books.length; i+=this.pageSize) {
+        pages.push(this.books.slice(i, i + this.pageSize));
+      }
+
+      this.pages = pages;
+    },
     requestData() {
 
       let terms = this.searchTerms.split(' ').join('+');
@@ -30,13 +41,9 @@ export default {
         .then((res) => {
           let books = res.data.items;
 
-          if(books.length > 10) {
-            books.length = 10;
-          }
-
           this.books = books.filter(book => typeof book.volumeInfo.pageCount !== 'undefined');
 
-          console.log(this.books)
+          this.makePages();
         })
         .catch((err) => {
           console.log(err);
@@ -106,10 +113,9 @@ export default {
       </v-container>
     </v-form>
     </v-sheet>
-    <!-- <input type="text" :value="this.searchTerms" @input="event => this.searchTerms = event.target.value">
-    <button @click="requestData()">search</button> -->
+    <v-pagination v-model="page" :length="this.pages.length"></v-pagination>
     <v-row>
-      <v-col cols="12" sm="6" md="4" v-for="(book, index) in this.books" :key="index">
+      <v-col cols="12" sm="6" md="4" v-for="(book, index) in this.pages[this.page - 1]" :key="index">
         <BookComponent 
           :title="book.volumeInfo.title" 
           :author="getValue(book.volumeInfo, 'authors[0]')" 
