@@ -22,6 +22,8 @@
         user: this.cookies.get("user") || undefined,
         newUsername: "",
         password: "",
+        oldPassword: "",
+        newPassword: "",
         alert: false,
         alertType: "error",
         usernameRules: [
@@ -159,6 +161,34 @@
             console.log(error);
         })
       },
+      changePassword() {
+        const cookie = this.cookies.get("user");
+
+        axios.post(this.APP_API_URL + 'changePassword', {
+          username: cookie.username,
+          session: cookie.id,
+          oldPassword: this.oldPassword,
+          newPassword: this.newPassword,
+        })
+        .then((response) => {
+          if(response.data.error) {
+            this.alertType = "error";
+            this.alertMessage = response.data.message;
+            this.alert = true;
+          }
+          else {
+            this.alertType = "success";
+            this.alertMessage = response.data.message;
+            this.alert = true;
+          }
+        })
+        .catch((error) => {
+          this.alertType = "error";
+          this.alertMessage = "Request Error";
+          this.alert = true;
+          console.log(error);
+        })
+      }
     },
     mounted() {
       if(!this.cookies.get("user")) {
@@ -207,12 +237,6 @@
             <v-toolbar-title>Settings</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
-              <v-btn
-                variant="text"
-                @click="dialog = false"
-              >
-                Close
-              </v-btn>
             </v-toolbar-items>
           </v-toolbar>
           <!-- <v-container> -->
@@ -243,11 +267,33 @@
                     v-model="this.password"
                     type="password"
                     label="password"
-                    :rules="this.passwordRules"
                     required
                   ></v-text-field>
                   <v-btn class="mt-2 w-25" color="error" @click="this.deleteUser"> 
                     Delete
+                  </v-btn>
+                </v-form>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-title>Change Password</v-list-item-title>
+                <v-form>
+                  <v-text-field
+                    class="w-25"
+                    v-model="this.oldPassword"
+                    type="password"
+                    label="old password"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    class="w-25"
+                    v-model="this.newPassword"
+                    type="password"
+                    label="new password"
+                    :rules="this.passwordRules"
+                    required
+                  ></v-text-field>
+                  <v-btn class="mt-2 w-25" @click="this.changePassword">
+                    Change Password
                   </v-btn>
                 </v-form>
               </v-list-item>
