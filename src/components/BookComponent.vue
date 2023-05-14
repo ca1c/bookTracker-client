@@ -37,7 +37,7 @@ export default {
 			this.$parent.$parent.$parent.$parent.editBook(this.keyId, this.readState);
 		},
 		addBook() {
-			this.$parent.$parent.addBook(this.keyId);
+			this.$parent.$parent.$parent.$parent.addBook(this.keyId);
 		},
 		deleteBook() {
 			this.$parent.$parent.$parent.$parent.deleteBook(this.keyId);

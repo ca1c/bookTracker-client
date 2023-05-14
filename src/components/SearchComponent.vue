@@ -65,7 +65,8 @@ export default {
           author: book.volumeInfo.authors[0],
           image: book.volumeInfo.imageLinks.thumbnail,
           pageCount: book.volumeInfo.pageCount,
-          read: "0"
+          read: "0",
+          session: user.id,
         })
         .then((response) => {
           console.log(response);

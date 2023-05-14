@@ -56,7 +56,9 @@
     methods: {
       getBooks() {
         if(this.user) {
-          axios.get(`${this.APP_API_URL}readBookDoc?username=${this.user.username}`)
+          const cookie = this.cookies.get("user");
+
+          axios.get(`${this.APP_API_URL}readBookDoc?username=${this.user.username}&session=${cookie.id}`)
             .then((response) => {
               this.books = response.data;
               this.emptyBooks = this.books.length === 0;
@@ -66,11 +68,14 @@
         }
       },
       editBook(i, progress) {
+        const cookie = this.cookies.get("user");
+
         let book = this.books[i];
         axios.post(this.APP_API_URL + 'editBook', {
           _id: book._id,
           username: this.user.username,
           progress: progress.toString(),
+          session: cookie.id,
         })
         .then((response) => {
           console.log(response);
@@ -81,10 +86,12 @@
       },
       deleteBook(i) {
         const book = this.books[i];
+        const cookie = this.cookies.get("user");
         
         axios.post(this.APP_API_URL + 'deleteBook', {
           _id: book._id,
-          username: this.user.username
+          username: this.user.username,
+          session: cookie.id
         })
         .then((response) => {
           console.log(response);
