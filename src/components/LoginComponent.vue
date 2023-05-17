@@ -13,7 +13,10 @@ export default {
             username: "",
             password: "",
             error: false,
+            errorType: "error",
             errorMessage: "",
+            forgotPassword: false,
+            email: "",
         }
     },
     methods: {
@@ -50,6 +53,29 @@ export default {
             })
             .catch((err) => {
                 console.log(err);
+            })
+        },
+        sendChangePasswordEmail() {
+            axios.post(this.APP_API_URL + 'forgotPasswordEmail', {
+                email: this.email
+            })
+            .then((response) => {
+                if(response.data.error) {
+                    this.error = true;
+                    this.errorType = "error";
+                    this.errorMessage = response.data.message;
+                }
+                else {
+                    this.error = true;
+                    this.errorType = "success";
+                    this.errorMessage = response.data.message;
+                }
+            })
+            .catch((error) => {
+                this.error = true;
+                this.errorType = "error";
+                this.errorMessage = "Request Error";
+                console.log(error);
             })
         }
     },
@@ -91,12 +117,22 @@ export default {
                     type="password"
                 ></v-text-field>
 
+                <v-btn block class="mt-2" variant="plain" @click="this.forgotPassword = true">Forgot Password?</v-btn>
+
+                <v-form v-if="forgotPassword">
+                    <v-text-field
+                    v-model="email"
+                    label="email"
+                    ></v-text-field>
+                    <v-btn block class="mt-2" @click="this.sendChangePasswordEmail">Send Email</v-btn>
+                </v-form>
+
                 <v-btn type="submit" block class="mt-2" @click="this.submit">Submit</v-btn>
 
                 </v-form>
                 <v-alert
                     v-if="this.error"
-                    type="error"
+                    :type="this.errorType"
                     title="Error"
                     :text="this.errorMessage"
                 ></v-alert>

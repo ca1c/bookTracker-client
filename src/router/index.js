@@ -5,6 +5,7 @@ import LoginComponent from '@/components/LoginComponent.vue';
 import RegisterComponent from '@/components/RegisterComponent.vue';
 import LogoutComponent from '@/components/LogoutComponent.vue';
 import MainpageComponent from '@/components/MainpageComponent.vue';
+import ForgotPasswordComponent from '@/components/ForgotPasswordComponent.vue';
 
 const routes = [
 	{
@@ -36,6 +37,11 @@ const routes = [
 		path: '/logout',
 		name: 'Logout',
 		component: LogoutComponent 
+	},
+	{
+		path: '/forgotPassword',
+		name: 'ForgotPassword',
+		component: ForgotPasswordComponent
 	}
 ]
 
