@@ -47,9 +47,9 @@ import * as passwordValidator from 'password-validator';
                     },
                 ],
                 passwordConfirmation: "",
-                error: false,
-                errorType: "error",
-                errorMessage: "",
+                alert: false,
+                alertType: "error",
+                alertMessage: "",
             }
         },
         methods: {
@@ -89,17 +89,17 @@ import * as passwordValidator from 'password-validator';
                 .then((response) => {
                     if(response.data.error) {
                         if(response.data.message.includes("Confirmation")) {
-                            this.errorType = "success";
+                            this.alertType = "success";
                         }
                         else {
-                            this.errorType = "error";
+                            this.alertType = "error";
                         }
 
-                        this.errorMessage = response.data.message;
-                        this.error = true;
+                        this.alertMessage = response.data.message;
+                        this.alert = true;
                     }
                     else {
-                        this.error = false;
+                        this.alert = false;
                         this.$router.push({path: '/login'});
                     }
                 })
@@ -162,10 +162,10 @@ import * as passwordValidator from 'password-validator';
                     <v-btn type="submit" block class="mt-2" @click="this.submit">Submit</v-btn>
                 </v-form>
                 <v-alert
-                    v-if="this.error"
-                    :type="this.errorType"
+                    v-if="this.alert"
+                    :type="this.alertType"
                     title="Alert"
-                    :text="this.errorMessage"
+                    :text="this.alertMessage"
                 ></v-alert>
             </v-card>
         </v-sheet>

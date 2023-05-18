@@ -12,9 +12,9 @@ export default {
             APP_API_URL: "",
             username: "",
             password: "",
-            error: false,
-            errorType: "error",
-            errorMessage: "",
+            alert: false,
+            alertType: "error",
+            alertMessage: "",
             forgotPassword: false,
             email: "",
         }
@@ -26,13 +26,15 @@ export default {
             }
 
             if(this.username.length === 0) {
-                this.error = true;
-                this.errorMessage = "username required";
+                this.alert = true;
+                this.alertType = "error";
+                this.alertMessage = "username required";
                 return;
             }
             if(this.password.length === 0) {
-                this.error = true;
-                this.errorMessage = "password required";
+                this.alert = true;
+                this.alertType = "error";
+                this.alertMessage = "password required";
                 return;
             }
             
@@ -42,11 +44,12 @@ export default {
             })
             .then((response) => {
                 if(response.data.error) {
-                    this.errorMessage = response.data.message;
-                    this.error = true;
+                    this.alertMessage = response.data.message;
+                    this.alertType = "error";
+                    this.alert = true;
                 }
                 if(response.data.user) {
-                    this.error = false;
+                    this.alert = false;
                     this.cookies.set("user", {username: response.data.username, id: response.data.user}, '1d');
                     this.$router.push({path: '/dashboard'});
                 }
@@ -61,20 +64,20 @@ export default {
             })
             .then((response) => {
                 if(response.data.error) {
-                    this.error = true;
-                    this.errorType = "error";
-                    this.errorMessage = response.data.message;
+                    this.alert = true;
+                    this.alertType = "error";
+                    this.alertMessage = response.data.message;
                 }
                 else {
-                    this.error = true;
-                    this.errorType = "success";
-                    this.errorMessage = response.data.message;
+                    this.alert = true;
+                    this.alertType = "success";
+                    this.alertMessage = response.data.message;
                 }
             })
             .catch((error) => {
-                this.error = true;
-                this.errorType = "error";
-                this.errorMessage = "Request Error";
+                this.alert = true;
+                this.alertType = "error";
+                this.alertMessage = "Request Error";
                 console.log(error);
             })
         }
@@ -131,10 +134,10 @@ export default {
 
                 </v-form>
                 <v-alert
-                    v-if="this.error"
-                    :type="this.errorType"
-                    title="Error"
-                    :text="this.errorMessage"
+                    v-if="this.alert"
+                    :type="this.alertType"
+                    title="Alert"
+                    :text="this.alertMessage"
                 ></v-alert>
             </v-card>
         </v-sheet>
