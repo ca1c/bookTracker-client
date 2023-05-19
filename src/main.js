@@ -5,6 +5,7 @@ import App from './App.vue';
 
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify';
+import { createStore } from 'vuex'; 
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
@@ -52,7 +53,21 @@ const vuetify = createVuetify({
   },
 })
 
+const store = createStore({
+  state () {
+    return {
+      count: 0
+    }
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  }
+})
+
 const app = createApp(App);
+app.use(store);
 app.use(vuetify);
 app.use(router);
 router.app = app;
