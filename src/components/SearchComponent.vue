@@ -20,7 +20,10 @@ export default {
       page: 1,
       searchTerms: "",
       API_KEY: "",
-      API_URL: ""
+      API_URL: "",
+      alert: false,
+      alertType: "success",
+      alertMessage: "",
     }
   },
   methods: {
@@ -70,12 +73,22 @@ export default {
         })
         .then((response) => {
           console.log(response);
+          this.showAlert("success", "Book Added!");
         })
         .catch((err) => {
           console.log(err);
         })
       }
     },
+    showAlert(type, message) {
+      this.alertType = type;
+      this.alertMessage = message;
+      this.alert = true;
+
+      setTimeout(() => {
+        this.alert = false;
+      }, 3000);
+    }
   },
   mounted() {
     if(!this.cookies.get("user")) {
@@ -115,6 +128,12 @@ export default {
     </v-form>
     </v-sheet>
     <v-pagination v-model="page" :length="this.pages.length"></v-pagination>
+    <v-alert
+        v-if="this.alert"
+        :type="this.alertType"
+        title="Alert"
+        :text="this.alertMessage"
+    ></v-alert>
     <v-row>
       <v-col cols="12" sm="6" md="4" v-for="(book, index) in this.pages[this.page - 1]" :key="index">
         <BookComponent 
