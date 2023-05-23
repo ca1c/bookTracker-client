@@ -50,6 +50,7 @@ import * as passwordValidator from 'password-validator';
                 alert: false,
                 alertType: "error",
                 alertMessage: "",
+                resendEmailButton: false
             }
         },
         methods: {
@@ -90,6 +91,7 @@ import * as passwordValidator from 'password-validator';
                     if(response.data.error) {
                         if(response.data.message.includes("Confirmation")) {
                             this.alertType = "success";
+                            this.resendEmailButton = true;
                         }
                         else {
                             this.alertType = "error";
@@ -105,6 +107,27 @@ import * as passwordValidator from 'password-validator';
                 })
                 .catch((err) => {
                     console.log(err);
+                })
+            },
+            resendEmail() {
+                axios.post(this.APP_API_URL + 'resendConfirmationEmail', {
+                    email: this.email
+                })
+                .then((response) => {
+                    if(response.data.error) {
+                        this.alertType = "error";
+                    }
+                    else {
+                        this.alertType = "success";
+                    }
+                    this.alertMessage = response.data.message;
+                    this.alert = true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.alertType = "error";
+                    this.alertMessage = "Request Error";
+                    this.alert = true;
                 })
             }
         },
@@ -160,6 +183,7 @@ import * as passwordValidator from 'password-validator';
                     ></v-text-field>
 
                     <v-btn type="submit" block class="mt-2" @click="this.submit">Submit</v-btn>
+                    <v-btn v-if="this.resendEmailButton" block class="mt-2" variant="plain" @click="this.resendEmail">Resend Email</v-btn>
                 </v-form>
                 <v-alert
                     v-if="this.alert"
