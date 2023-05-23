@@ -20,5 +20,10 @@ npm run build
 npm run lint
 ```
 
+#Heroku
+
+`postinstall: npm run build`
+`start: node server.js`
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
