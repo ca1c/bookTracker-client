@@ -211,8 +211,18 @@
 
 <template>
   <v-container class="mb-16">
-    <p class="text-h4">Dashboard</p>
-
+    <v-row>
+      <p class="text-h4">Dashboard</p>
+      <v-btn
+        color="primary"
+        density="compact"
+        icon="mdi-cog"
+        variant="plain"
+        dark
+        @click="this.dialog = true"
+      >
+      </v-btn>
+    </v-row>
     <v-row justify="center">
       <v-dialog
         v-model="dialog"
@@ -220,15 +230,9 @@
         :scrim="false"
         transition="dialog-bottom-transition"
       >
-        <template v-slot:activator="{ props }">
-          <v-btn
-            color="primary"
-            dark
-            v-bind="props"
-          >
-            Settings
-          </v-btn>
-        </template>
+        <!-- <template v-slot:activator="{ props }">
+
+        </template> -->
         <v-card>
           <v-toolbar
             dark
@@ -250,19 +254,20 @@
             <v-list
               lines="two"
               subheader
+              style="margin: 0px; padding: 0px; max-width: 400px;"
             >
               <v-list-subheader>Edit User</v-list-subheader>
               <v-list-item>
                 <v-list-item-title>Change username</v-list-item-title>
                 <v-form>
                   <v-text-field
-                    class="w-25"
+                    
                     v-model="this.newUsername"
                     label="New Username"
                     :rules="this.usernameRules"
                     required
                   ></v-text-field>
-                  <v-btn class="mt-2 w-25" @click="this.changeUsername">Submit</v-btn>
+                  <v-btn class="mt-2" @click="this.changeUsername">Submit</v-btn>
                 </v-form>
               </v-list-item>
               <v-divider></v-divider>
@@ -270,13 +275,12 @@
                 <v-list-item-title>Delete User</v-list-item-title>
                 <v-form>
                   <v-text-field
-                    class="w-25"
                     v-model="this.password"
                     type="password"
                     label="password"
                     required
                   ></v-text-field>
-                  <v-btn class="mt-2 w-25" color="error" @click="this.deleteUser"> 
+                  <v-btn class="mt-2" color="error" @click="this.deleteUser"> 
                     Delete
                   </v-btn>
                 </v-form>
@@ -285,21 +289,19 @@
                 <v-list-item-title>Change Password</v-list-item-title>
                 <v-form>
                   <v-text-field
-                    class="w-25"
                     v-model="this.oldPassword"
                     type="password"
                     label="old password"
                     required
                   ></v-text-field>
                   <v-text-field
-                    class="w-25"
                     v-model="this.newPassword"
                     type="password"
                     label="new password"
                     :rules="this.passwordRules"
                     required
                   ></v-text-field>
-                  <v-btn class="mt-2 w-25" @click="this.changePassword">
+                  <v-btn class="mt-2" @click="this.changePassword">
                     Change Password
                   </v-btn>
                 </v-form>
