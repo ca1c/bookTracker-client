@@ -26,7 +26,8 @@
           </div>
         </v-tabs>
       </v-toolbar>
-      <router-view :key="$route.fullPath"/>
+      
+      <router-view :key="$route.fullPath" />
 
       <v-footer color="surface" class="text-center d-flex flex-column" app="true">
         <div>

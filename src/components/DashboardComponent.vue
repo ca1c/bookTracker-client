@@ -281,12 +281,14 @@
                   </v-btn>
                 </v-form>
               </v-list-item>
-              <v-alert
-                    v-if="this.$store.state.alert"
-                    :type="this.$store.state.alertType"
-                    title="Alert"
-                    :text="this.$store.state.alertMessage"
+              <v-fade-transition>
+                <v-alert
+                      v-if="this.$store.state.alert"
+                      :type="this.$store.state.alertType"
+                      title="Alert"
+                      :text="this.$store.state.alertMessage"
                 ></v-alert>
+              </v-fade-transition>
             </v-list>
           <!-- </v-container> -->
         </v-card>

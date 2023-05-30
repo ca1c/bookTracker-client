@@ -93,12 +93,14 @@ export default {
                 <v-btn block class="mt-2" @click="this.submit">Change Password</v-btn>
             </v-container>
         </v-form>
-        <v-alert
-            v-if="this.$store.state.alert"
-            :type="this.$store.state.alertType"
-            title="Alert"
-            :text="this.$store.state.alertMessage"
-        ></v-alert>
+        <v-fade-transition>
+            <v-alert
+                v-if="this.$store.state.alert"
+                :type="this.$store.state.alertType"
+                title="Alert"
+                :text="this.$store.state.alertMessage"
+            ></v-alert>
+        </v-fade-transition>
     </v-sheet>
   </v-container>
 </template>

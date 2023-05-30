@@ -169,12 +169,14 @@ import * as passwordValidator from 'password-validator';
                     <v-btn type="submit" block class="mt-2" @click="this.submit">Submit</v-btn>
                     <v-btn v-if="this.resendEmailButton" block class="mt-2" variant="plain" @click="this.resendEmail">Resend Email</v-btn>
                 </v-form>
-                <v-alert
-                    v-if="this.$store.state.alert"
-                    :type="this.$store.state.alertType"
-                    title="Alert"
-                    :text="this.$store.state.alertMessage"
-                ></v-alert>
+                <v-fade-transition>
+                    <v-alert
+                        v-if="this.$store.state.alert"
+                        :type="this.$store.state.alertType"
+                        title="Alert"
+                        :text="this.$store.state.alertMessage"
+                    ></v-alert>
+                </v-fade-transition>
             </v-card>
         </v-sheet>
     </v-container>

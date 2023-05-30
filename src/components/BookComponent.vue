@@ -33,7 +33,7 @@ export default {
 			}
 		},
 		subtractRead() {
-			if(this.readState - parseInt(this.newPagesRead) > 0) {
+			if(this.readState - parseInt(this.newPagesRead) >= 0) {
 				this.error = false;
 				this.readState = (this.readState - parseInt(this.newPagesRead));
 				this.updateProgressAmt();
@@ -102,40 +102,43 @@ export default {
 				<!-- <button @click="this.toggleEdit">Edit</button>
 				<button @click="this.finishBook">Finish</button>
 				<button @click="this.deleteBook">Delete</button> -->
+				<v-expand-transition>
+					<div class="edit" v-if="this.edit">
+						<v-card-text>
+							<p class="text-h6">Add Pages Read:</p>
+							<!-- <p v-if="this.error" :style="{ color: 'red' }">Too Many Pages!</p> -->
+							<v-fade-transition>
+								<v-alert
+									v-if="this.error"
+									type="error"
+									:text="this.errorMessage"
+								></v-alert>
+							</v-fade-transition>
+							<!-- <input type="number" :value="this.newPagesRead" @input="event => this.newPagesRead = event.target.value">
+							<button @click="this.editRead">submit</button> -->
+							<v-row>
+								<v-col
+								cols="12"
+								md="6"
+								>
+									<v-text-field
+										v-model="newPagesRead"
+										type="number"
+										label="search"
+									></v-text-field>
+								</v-col>
 
-				<div class="edit" v-if="this.edit">
-					<v-card-text>
-						<p class="text-h6">Add Pages Read:</p>
-						<!-- <p v-if="this.error" :style="{ color: 'red' }">Too Many Pages!</p> -->
-						<v-alert
-							v-if="this.error"
-							type="error"
-							:text="this.errorMessage"
-						></v-alert>
-						<!-- <input type="number" :value="this.newPagesRead" @input="event => this.newPagesRead = event.target.value">
-						<button @click="this.editRead">submit</button> -->
-						<v-row>
-							<v-col
-							cols="12"
-							md="6"
-							>
-								<v-text-field
-									v-model="newPagesRead"
-									type="number"
-									label="search"
-								></v-text-field>
-							</v-col>
-
-							<v-col
-							cols="12"
-							md="6"
-							>
-								<v-btn class="mt-2" @click="this.addRead">Add</v-btn>
-								<v-btn class="mt-2" @click="this.subtractRead">Subtract</v-btn>
-							</v-col>
-						</v-row>
-					</v-card-text>
-				</div>
+								<v-col
+								cols="12"
+								md="6"
+								>
+									<v-btn class="mt-2" @click="this.addRead">Add</v-btn>
+									<v-btn class="mt-2" @click="this.subtractRead">Subtract</v-btn>
+								</v-col>
+							</v-row>
+						</v-card-text>
+					</div>
+				</v-expand-transition>
 			</div>
 			<div v-if="this.searching">
 				<v-card-actions>
