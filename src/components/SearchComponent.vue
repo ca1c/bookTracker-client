@@ -23,6 +23,7 @@ export default {
       API_URL: "",
       snackbar: false,
       timeout: 2000,
+      loading: false,
     }
   },
   methods: {
@@ -39,8 +40,11 @@ export default {
       let terms = this.searchTerms.split(' ').join('+');
       let query = `${this.APP_API_URL}searchBook?q=${terms}`;
 
+      this.loading = true;
+
       axios.get(query)
         .then((res) => {
+          this.loading = false;
           let books = res.data.items;
 
           this.books = books.filter(book => typeof book.volumeInfo.pageCount !== 'undefined');
@@ -129,7 +133,7 @@ export default {
 
       <template v-slot:actions>
         <v-btn
-          color="primary"
+          color="secondary"
           variant="text"
           @click="snackbar = false"
         >
@@ -137,6 +141,12 @@ export default {
         </v-btn>
       </template>
     </v-snackbar>
+    <div class="d-flex justify-center">
+      <v-progress-circular v-if="this.loading"
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
+    </div>
     <v-row>
       <v-col cols="12" sm="6" md="4" v-for="(book, index) in this.pages[this.page - 1]" :key="index">
         <BookComponent 
