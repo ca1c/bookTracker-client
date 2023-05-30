@@ -21,6 +21,8 @@ export default {
       searchTerms: "",
       API_KEY: "",
       API_URL: "",
+      snackbar: false,
+      timeout: 2000,
     }
   },
   methods: {
@@ -77,13 +79,8 @@ export default {
         })
       }
     },
-    showAlert(message) {
-
-      this.$store.commit('successAlert', message);
-
-      setTimeout(() => {
-        this.$store.commit('alertOff');
-      }, 3000);
+    showAlert() {
+      this.snackbar = true;
     }
   },
   mounted() {
@@ -124,12 +121,22 @@ export default {
     </v-form>
     </v-sheet>
     <v-pagination v-model="page" :length="this.pages.length"></v-pagination>
-    <v-alert
-        v-if="this.$store.state.alert"
-        :type="this.$store.state.alertType"
-        title="Alert"
-        :text="this.$store.state.alertMessage"
-    ></v-alert>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+    >
+      Book Added To Your Library.
+
+      <template v-slot:actions>
+        <v-btn
+          color="primary"
+          variant="text"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
     <v-row>
       <v-col cols="12" sm="6" md="4" v-for="(book, index) in this.pages[this.page - 1]" :key="index">
         <BookComponent 
