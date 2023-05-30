@@ -5,6 +5,7 @@ export default {
 		return {
 			edit: false,
 			error: false,
+			errorMessage: "Too Many Pages",
 			newPagesRead: 0,
 			readState: 0,
 			pageCountState: 0,
@@ -19,7 +20,7 @@ export default {
 		toggleEdit() {
 			this.edit = this.edit ? false : true;
 		},
-		editRead() {
+		addRead() {
 			if(parseInt(this.newPagesRead) + this.readState <= this.pageCountState) {
 				this.error = false;
 				this.readState = (this.readState + parseInt(this.newPagesRead));
@@ -28,6 +29,19 @@ export default {
 			}
 			else {
 				this.error = true;
+				this.errorMessage = "Too Many Pages";
+			}
+		},
+		subtractRead() {
+			if(this.readState - parseInt(this.newPagesRead) >= 0) {
+				this.error = false;
+				this.readState = (this.readState - parseInt(this.newPagesRead));
+				this.updateProgressAmt();
+				this.$emit('editBook', this.keyId, this.readState);
+			}
+			else {
+				this.error = true;
+				this.errorMessage = "Subtracting too many pages";
 			}
 		},
 		finishBook() {
@@ -88,39 +102,43 @@ export default {
 				<!-- <button @click="this.toggleEdit">Edit</button>
 				<button @click="this.finishBook">Finish</button>
 				<button @click="this.deleteBook">Delete</button> -->
+				<v-expand-transition>
+					<div class="edit" v-if="this.edit">
+						<v-card-text>
+							<p class="text-h6">Add Pages Read:</p>
+							<!-- <p v-if="this.error" :style="{ color: 'red' }">Too Many Pages!</p> -->
+							<v-fade-transition>
+								<v-alert
+									v-if="this.error"
+									type="error"
+									:text="this.errorMessage"
+								></v-alert>
+							</v-fade-transition>
+							<!-- <input type="number" :value="this.newPagesRead" @input="event => this.newPagesRead = event.target.value">
+							<button @click="this.editRead">submit</button> -->
+							<v-row>
+								<v-col
+								cols="12"
+								md="6"
+								>
+									<v-text-field
+										v-model="newPagesRead"
+										type="number"
+										label="search"
+									></v-text-field>
+								</v-col>
 
-				<div class="edit" v-if="this.edit">
-					<v-card-text>
-						<p class="text-h6">Add Pages Read:</p>
-						<!-- <p v-if="this.error" :style="{ color: 'red' }">Too Many Pages!</p> -->
-						<v-alert
-							v-if="this.error"
-							type="error"
-							text="Too Many Pages!"
-						></v-alert>
-						<!-- <input type="number" :value="this.newPagesRead" @input="event => this.newPagesRead = event.target.value">
-						<button @click="this.editRead">submit</button> -->
-						<v-row>
-							<v-col
-							cols="12"
-							md="6"
-							>
-								<v-text-field
-									v-model="newPagesRead"
-									type="number"
-									label="search"
-								></v-text-field>
-							</v-col>
-
-							<v-col
-							cols="12"
-							md="6"
-							>
-								<v-btn class="mt-2" @click="this.editRead">Submit</v-btn>
-							</v-col>
-						</v-row>
-					</v-card-text>
-				</div>
+								<v-col
+								cols="12"
+								md="6"
+								>
+									<v-btn class="mt-2" @click="this.addRead">Add</v-btn>
+									<v-btn class="mt-2" @click="this.subtractRead">Subtract</v-btn>
+								</v-col>
+							</v-row>
+						</v-card-text>
+					</div>
+				</v-expand-transition>
 			</div>
 			<div v-if="this.searching">
 				<v-card-actions>
