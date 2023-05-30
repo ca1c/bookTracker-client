@@ -5,6 +5,7 @@ export default {
 		return {
 			edit: false,
 			error: false,
+			errorMessage: "Too Many Pages",
 			newPagesRead: 0,
 			readState: 0,
 			pageCountState: 0,
@@ -19,7 +20,7 @@ export default {
 		toggleEdit() {
 			this.edit = this.edit ? false : true;
 		},
-		editRead() {
+		addRead() {
 			if(parseInt(this.newPagesRead) + this.readState <= this.pageCountState) {
 				this.error = false;
 				this.readState = (this.readState + parseInt(this.newPagesRead));
@@ -28,6 +29,19 @@ export default {
 			}
 			else {
 				this.error = true;
+				this.errorMessage = "Too Many Pages";
+			}
+		},
+		subtractRead() {
+			if(this.readState - parseInt(this.newPagesRead) > 0) {
+				this.error = false;
+				this.readState = (this.readState - parseInt(this.newPagesRead));
+				this.updateProgressAmt();
+				this.$emit('editBook', this.keyId, this.readState);
+			}
+			else {
+				this.error = true;
+				this.errorMessage = "Subtracting too many pages";
 			}
 		},
 		finishBook() {
@@ -96,7 +110,7 @@ export default {
 						<v-alert
 							v-if="this.error"
 							type="error"
-							text="Too Many Pages!"
+							:text="this.errorMessage"
 						></v-alert>
 						<!-- <input type="number" :value="this.newPagesRead" @input="event => this.newPagesRead = event.target.value">
 						<button @click="this.editRead">submit</button> -->
@@ -116,7 +130,8 @@ export default {
 							cols="12"
 							md="6"
 							>
-								<v-btn class="mt-2" @click="this.editRead">Submit</v-btn>
+								<v-btn class="mt-2" @click="this.addRead">Add</v-btn>
+								<v-btn class="mt-2" @click="this.subtractRead">Subtract</v-btn>
 							</v-col>
 						</v-row>
 					</v-card-text>
