@@ -5,7 +5,7 @@ import App from './App.vue';
 
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify';
-// import { createStore } from 'vuex'; 
+import { createStore } from 'vuex'; 
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
@@ -53,25 +53,34 @@ const vuetify = createVuetify({
   },
 })
 
-// const store = createStore({
-//   state () {
-//     return {
-//       alert: false,
-//       alertType: "error",
-//       alertMessage: "",
-//     }
-//   },
-//   mutations: {
-//     setAlert (state) {
-//       state.alert = state.alert ? false : true;
-//       state.alertType = state.alertType
-//     }
-//   }
-// })
+const store = createStore({
+  state () {
+    return {
+      alert: false,
+      alertType: "error",
+      alertMessage: "",
+    }
+  },
+  mutations: {
+    errorAlert (state, message) {
+      state.alert = true;
+      state.alertType = "error";
+      state.alertMessage = message ?? "";
+    },
+    successAlert (state, message) {
+      state.alert = true;
+      state.alertType = "success";
+      state.alertMessage = message ?? "";
+    },
+    alertOff(state) {
+      state.alert = false;
+    }
+  }
+})
 
 const app = createApp(App);
 
-// app.use(store);
+app.use(store);
 app.use(vuetify);
 app.use(router);
 router.app = app;

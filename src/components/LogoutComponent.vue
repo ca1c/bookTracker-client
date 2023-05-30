@@ -14,8 +14,7 @@ import { useCookies } from "vue3-cookies";
         id: cookie.id,
       })
       .then((response) => {
-
-        console.log(response);
+        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);

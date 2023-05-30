@@ -21,9 +21,6 @@ export default {
       searchTerms: "",
       API_KEY: "",
       API_URL: "",
-      alert: false,
-      alertType: "success",
-      alertMessage: "",
     }
   },
   methods: {
@@ -73,20 +70,19 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          this.showAlert("success", "Book Added!");
+          this.showAlert("Book Added!");
         })
         .catch((err) => {
           console.log(err);
         })
       }
     },
-    showAlert(type, message) {
-      this.alertType = type;
-      this.alertMessage = message;
-      this.alert = true;
+    showAlert(message) {
+
+      this.$store.commit('successAlert', message);
 
       setTimeout(() => {
-        this.alert = false;
+        this.$store.commit('alertOff');
       }, 3000);
     }
   },
@@ -129,10 +125,10 @@ export default {
     </v-sheet>
     <v-pagination v-model="page" :length="this.pages.length"></v-pagination>
     <v-alert
-        v-if="this.alert"
-        :type="this.alertType"
+        v-if="this.$store.state.alert"
+        :type="this.$store.state.alertType"
         title="Alert"
-        :text="this.alertMessage"
+        :text="this.$store.state.alertMessage"
     ></v-alert>
     <v-row>
       <v-col cols="12" sm="6" md="4" v-for="(book, index) in this.pages[this.page - 1]" :key="index">
@@ -143,6 +139,7 @@ export default {
           :pageCount="getValue(book.volumeInfo, 'pageCount')" 
           :searching="true"
           :keyId="index"
+          @addBook="this.addBook"
         />
       </v-col>
     </v-row>

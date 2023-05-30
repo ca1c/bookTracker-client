@@ -12,9 +12,6 @@ export default {
             APP_API_URL: "",
             username: "",
             password: "",
-            alert: false,
-            alertType: "error",
-            alertMessage: "",
             forgotPassword: false,
             email: "",
         }
@@ -26,15 +23,11 @@ export default {
             }
 
             if(this.username.length === 0) {
-                this.alert = true;
-                this.alertType = "error";
-                this.alertMessage = "username required";
+                this.$store.commit('errorAlert', "username required");
                 return;
             }
             if(this.password.length === 0) {
-                this.alert = true;
-                this.alertType = "error";
-                this.alertMessage = "password required";
+                this.$store.commit('errorAlert', "password required");
                 return;
             }
             
@@ -44,12 +37,10 @@ export default {
             })
             .then((response) => {
                 if(response.data.error) {
-                    this.alertMessage = response.data.message;
-                    this.alertType = "error";
-                    this.alert = true;
+                    this.$store.commit('errorAlert', response.data.message);
                 }
                 if(response.data.user) {
-                    this.alert = false;
+                    this.$store.commit('alertOff');
                     this.cookies.set("user", {username: response.data.username, id: response.data.user}, '1d');
                     this.$router.push({path: '/dashboard'});
                 }
@@ -64,20 +55,14 @@ export default {
             })
             .then((response) => {
                 if(response.data.error) {
-                    this.alert = true;
-                    this.alertType = "error";
-                    this.alertMessage = response.data.message;
+                    this.$store.commit('errorAlert', response.data.message);
                 }
                 else {
-                    this.alert = true;
-                    this.alertType = "success";
-                    this.alertMessage = response.data.message;
+                    this.$store.commit('successAlert', response.data.message);
                 }
             })
             .catch((error) => {
-                this.alert = true;
-                this.alertType = "error";
-                this.alertMessage = "Request Error";
+                this.$store.commit('errorAlert', "Request Error");
                 console.log(error);
             })
         }
@@ -134,23 +119,15 @@ export default {
 
                 </v-form>
                 <v-alert
-                    v-if="this.alert"
-                    :type="this.alertType"
+                    v-if="this.$store.state.alert"
+                    :type="this.$store.state.alertType"
                     title="Alert"
-                    :text="this.alertMessage"
+                    :text="this.$store.state.alertMessage"
                 ></v-alert>
             </v-card>
         </v-sheet>
     </v-container>
     </v-app>
-
-    <!-- <form class="form" @submit.prevent="onSubmit">
-        <label>username:</label>
-        <input type="text" @input="event => this.username = event.target.value">
-        <label>password</label>
-        <input type="password" @input="event => this.password = event.target.value">
-        <button type="submit" @click="this.submit">Login</button>
-    </form> -->
 </template>
 
 <style>
