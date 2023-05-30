@@ -21,9 +21,9 @@ export default {
       searchTerms: "",
       API_KEY: "",
       API_URL: "",
-      alert: false,
-      alertType: "success",
-      alertMessage: "",
+      snackbar: false,
+      timeout: 2000,
+      loading: false,
     }
   },
   methods: {
@@ -40,8 +40,11 @@ export default {
       let terms = this.searchTerms.split(' ').join('+');
       let query = `${this.APP_API_URL}searchBook?q=${terms}`;
 
+      this.loading = true;
+
       axios.get(query)
         .then((res) => {
+          this.loading = false;
           let books = res.data.items;
 
           this.books = books.filter(book => typeof book.volumeInfo.pageCount !== 'undefined');
@@ -73,21 +76,15 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          this.showAlert("success", "Book Added!");
+          this.showAlert("Book Added!");
         })
         .catch((err) => {
           console.log(err);
         })
       }
     },
-    showAlert(type, message) {
-      this.alertType = type;
-      this.alertMessage = message;
-      this.alert = true;
-
-      setTimeout(() => {
-        this.alert = false;
-      }, 3000);
+    showAlert() {
+      this.snackbar = true;
     }
   },
   mounted() {
@@ -128,12 +125,28 @@ export default {
     </v-form>
     </v-sheet>
     <v-pagination v-model="page" :length="this.pages.length"></v-pagination>
-    <v-alert
-        v-if="this.alert"
-        :type="this.alertType"
-        title="Alert"
-        :text="this.alertMessage"
-    ></v-alert>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+    >
+      Book Added To Your Library.
+
+      <template v-slot:actions>
+        <v-btn
+          color="secondary"
+          variant="text"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <div class="d-flex justify-center">
+      <v-progress-circular v-if="this.loading"
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
+    </div>
     <v-row>
       <v-col cols="12" sm="6" md="4" v-for="(book, index) in this.pages[this.page - 1]" :key="index">
         <BookComponent 
@@ -143,6 +156,7 @@ export default {
           :pageCount="getValue(book.volumeInfo, 'pageCount')" 
           :searching="true"
           :keyId="index"
+          @addBook="this.addBook"
         />
       </v-col>
     </v-row>

@@ -30,26 +30,9 @@ import * as passwordValidator from 'password-validator';
                 ],
                 password: "",
                 passwordRules: [
-                    value => {
-                        const schema = new passwordValidator();
-
-                        schema
-                        .is().min(8)                                    // Minimum length 8
-                        .is().max(100)                                  // Maximum length 100
-                        .has().uppercase()                              // Must have uppercase letters
-                        .has().lowercase()                              // Must have lowercase letters
-                        .has().digits(1)                                // Must have at least 1 digits
-                        .has().not().spaces()                           // Should not have spaces
-
-                        if (schema.validate(value)) return true;
-
-                        return 'Password should be 8 characters long, at least 1 digit, 1 uppercase and lowercase letter, no spaces'
-                    },
+                    value => this.passwordValidation(value)
                 ],
                 passwordConfirmation: "",
-                alert: false,
-                alertType: "error",
-                alertMessage: "",
                 resendEmailButton: false
             }
         },
@@ -65,17 +48,30 @@ import * as passwordValidator from 'password-validator';
                 .has().digits(1)                                // Must have at least 1 digits
                 .has().not().spaces();                          // Should not have spaces
 
-                if (!schema.validate(this.password)) return false;
+                if (this.passwordValidation(this.password) !== true) return false;
                 if (!this.username?.length > 2) return false;
                 if (!EmailValidator.validate(this.email)) return false;
                 if (this.password !== this.passwordConfirmation) {
-                    this.errorType = "error";
-                    this.errorMessage = "Passwords should match";
-                    this.error = true;
+                    this.$store.commit("errorAlert", "Passwords should match");
                     return false;
                 }
 
                 return true;
+            },
+            passwordValidation(value) {
+                const schema = new passwordValidator();
+
+                schema
+                .is().min(8)                                    // Minimum length 8
+                .is().max(100)                                  // Maximum length 100
+                .has().uppercase()                              // Must have uppercase letters
+                .has().lowercase()                              // Must have lowercase letters
+                .has().digits(1)                                // Must have at least 1 digits
+                .has().not().spaces();                          // Should not have spaces
+
+                if (schema.validate(value)) return true;
+
+                return 'Password should be 8 characters long, at least 1 digit, 1 uppercase and lowercase letter, no spaces'
             },
             submit() {
                 if(!this.validateForm()) {
@@ -89,23 +85,15 @@ import * as passwordValidator from 'password-validator';
                 })
                 .then((response) => {
                     if(response.data.error) {
-                        if(response.data.message.includes("Confirmation")) {
-                            this.alertType = "success";
-                            this.resendEmailButton = true;
-                        }
-                        else {
-                            this.alertType = "error";
-                        }
-
-                        this.alertMessage = response.data.message;
-                        this.alert = true;
+                        this.$store.commit('errorAlert', response.data.message);
                     }
                     else {
-                        this.alert = false;
-                        this.$router.push({path: '/login'});
+                        this.resendEmailButton = true;
+                        this.$store.commit('successAlert', response.data.message);
                     }
                 })
                 .catch((err) => {
+                    this.$store.commit('errorAlert', "Request Error");
                     console.log(err);
                 })
             },
@@ -115,19 +103,15 @@ import * as passwordValidator from 'password-validator';
                 })
                 .then((response) => {
                     if(response.data.error) {
-                        this.alertType = "error";
+                        this.$store.commit('errorAlert', response.data.message);
                     }
                     else {
-                        this.alertType = "success";
+                        this.$store.commit('successAlert', response.data.message);
                     }
-                    this.alertMessage = response.data.message;
-                    this.alert = true;
                 })
                 .catch((error) => {
                     console.log(error);
-                    this.alertType = "error";
-                    this.alertMessage = "Request Error";
-                    this.alert = true;
+                    this.$store.commit('errorAlert', "Request Error");
                 })
             }
         },
@@ -186,10 +170,10 @@ import * as passwordValidator from 'password-validator';
                     <v-btn v-if="this.resendEmailButton" block class="mt-2" variant="plain" @click="this.resendEmail">Resend Email</v-btn>
                 </v-form>
                 <v-alert
-                    v-if="this.alert"
-                    :type="this.alertType"
+                    v-if="this.$store.state.alert"
+                    :type="this.$store.state.alertType"
                     title="Alert"
-                    :text="this.alertMessage"
+                    :text="this.$store.state.alertMessage"
                 ></v-alert>
             </v-card>
         </v-sheet>

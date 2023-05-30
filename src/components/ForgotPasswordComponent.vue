@@ -16,9 +16,6 @@ export default {
         password: "",
         confirmPassword: "",
         passwordRules: [ value => this.passwordRulesFunc(value) ],
-        alert: false,
-        alertType: "error",
-        alertMessage: ""
     }
   },
   methods: {
@@ -28,16 +25,12 @@ export default {
         console.log(id);
 
         if(!id) {
-            this.alert = true;
-            this.alertType = "error";
-            this.alertMessage = "please submit a change password request first"
+            this.$store.commit('errorAlert', "please submit a change password request first");
             return;
         }
 
         if(!this.passwordRulesFunc(this.password) && this.password !== this.confirmPassword) {
-            this.alert = true;
-            this.alertType = "error";
-            this.alertMessage = "passwords should match";
+            this.$store.commit('errorAlert', "passwords should match");
             return;
         }
 
@@ -47,20 +40,14 @@ export default {
         })
         .then((response) => {
             if(response.data.error) {
-                this.alert = true;
-                this.alertType = "error";
-                this.alertMessage = response.data.message;
+                this.$store.commit('errorAlert', response.data.message);
             }
             else {
-                this.alert = true;
-                this.alertType = "success";
-                this.alertMessage = response.data.message;
+                this.$store.commit('successAlert', response.data.message);
             }
         })
         .catch((error) => {
-            this.alert = true;
-            this.alertType = "error";
-            this.alertMessage = "Request Error";
+            this.$store.commit('errorAlert', "Request Error");
             console.log(error);
         });
     },
@@ -107,10 +94,10 @@ export default {
             </v-container>
         </v-form>
         <v-alert
-            v-if="this.alert"
-            :type="this.alertType"
+            v-if="this.$store.state.alert"
+            :type="this.$store.state.alertType"
             title="Alert"
-            :text="this.alertMessage"
+            :text="this.$store.state.alertMessage"
         ></v-alert>
     </v-sheet>
   </v-container>

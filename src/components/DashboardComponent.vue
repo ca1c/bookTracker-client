@@ -24,8 +24,6 @@
         password: "",
         oldPassword: "",
         newPassword: "",
-        alert: false,
-        alertType: "error",
         usernameRules: [
             value => {
               if (value?.length > 2) return true
@@ -50,7 +48,6 @@
             return 'Password should be 8 characters long, at least 1 digit, 1 uppercase and lowercase letter, no spaces'
           },
         ],
-        alertMessage: "",
       }
     },
     methods: {
@@ -105,9 +102,7 @@
         let cookie = this.cookies.get("user");
 
         if(this.newUsername.length < 3) {
-            this.alertType = "error";
-            this.alertMessage = "username should be 3 characters or more";
-            this.alert = true;
+            this.$store.commit('errorAlert', "username should be 3 characters or more");
             return;
         }
 
@@ -118,22 +113,15 @@
         })
         .then((response) => {
           if(response.data.error) {
-            this.alertType = "error";
-            this.alertMessage = response.data.message;
-            this.alert = true;
+            this.$store.commit('errorAlert', response.data.message);
           }
           else {
-            this.alertType = "success";
-            this.alertMessage = response.data.message;
-            this.alert = true;
-
+            this.$store.commit('successAlert', response.data.message);
             this.cookies.set("user", {username: this.newUsername, id: cookie.id}, '1d');
           }
         })
         .catch((error) => {
-          this.alertType = "error";
-          this.alertMessage = "Request Error";
-          this.alert = true;
+          this.$store.commit('errorAlert', "Request Error");
           console.log(error);
         })
       },
@@ -149,22 +137,15 @@
         })
         .then((response) => {
           if(response.data.error) {
-            this.alertType = "error";
-            this.alertMessage = response.data.message;
-            this.alert = true;
+            this.$store.commit('errorAlert', response.data.message);
           }
           else {
-            this.alertType = "success";
-            this.alertMessage = response.data.message;
-            this.alert = true;
-
+            this.$store.commit('successAlert', response.data.message);
             this.$router.push({path: '/logout'});
           }
         })
         .catch((error) => {
-            this.alertType = "error";
-            this.alertMessage = "Request Error";
-            this.alert = true;
+            this.$store.commit('errorAlert', "Request Error");
             console.log(error);
         })
       },
@@ -179,20 +160,14 @@
         })
         .then((response) => {
           if(response.data.error) {
-            this.alertType = "error";
-            this.alertMessage = response.data.message;
-            this.alert = true;
+            this.$store.commit('errorAlert', response.data.message);
           }
           else {
-            this.alertType = "success";
-            this.alertMessage = response.data.message;
-            this.alert = true;
+            this.$store.commit('successAlert', response.data.message);
           }
         })
         .catch((error) => {
-          this.alertType = "error";
-          this.alertMessage = "Request Error";
-          this.alert = true;
+          this.$store.commit('errorAlert', "Request Error");
           console.log(error);
         })
       }
@@ -307,10 +282,10 @@
                 </v-form>
               </v-list-item>
               <v-alert
-                    v-if="this.alert"
-                    :type="this.alertType"
+                    v-if="this.$store.state.alert"
+                    :type="this.$store.state.alertType"
                     title="Alert"
-                    :text="this.alertMessage"
+                    :text="this.$store.state.alertMessage"
                 ></v-alert>
             </v-list>
           <!-- </v-container> -->
@@ -324,8 +299,16 @@
     </div>
     <v-row>
       <v-col cols="12" sm="6" md="4" v-for="(book, index) in this.books" :key="index">
-        <BookComponent :title="book.title" :author="book.author" :cover="book.image" progress="true" :read="book.read" :pageCount="book.pageCount" :keyId="index"
-          :deleteFunc="deleteBook"/>
+        <BookComponent 
+          :title="book.title" 
+          :author="book.author" 
+          :cover="book.image" 
+          :read="book.read" 
+          :pageCount="book.pageCount" 
+          :keyId="index"
+          progress="true" 
+          @editBook="this.editBook"
+          @deleteBook="this.deleteBook"/>
       </v-col>
     </v-row>
   </v-container>

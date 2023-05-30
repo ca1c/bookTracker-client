@@ -65,6 +65,7 @@ export default {
   },
   mounted() {
     this.session = this.cookies.get("user");
+    this.$store.commit("alertOff");
   }
 }
 </script>
