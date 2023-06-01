@@ -65,7 +65,7 @@ export default {
       let user = this.cookies.get("user");
       let book = this.books[i];
       if(user.username) {
-        axios.post(this.APP_API_URL + 'addBook', {
+        axios.put(this.APP_API_URL + 'addBook', {
           username: user.username,
           title: book.volumeInfo.title,
           author: book.volumeInfo.authors[0],
