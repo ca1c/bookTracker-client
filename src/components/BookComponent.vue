@@ -124,7 +124,7 @@ export default {
 									<v-text-field
 										v-model="newPagesRead"
 										type="number"
-										label="search"
+										label="pages"
 									></v-text-field>
 								</v-col>
 

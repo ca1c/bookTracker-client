@@ -38,16 +38,6 @@ import * as passwordValidator from 'password-validator';
         },
         methods: {
             validateForm() {
-                const schema = new passwordValidator();
-
-                schema
-                .is().min(8)                                    // Minimum length 8
-                .is().max(100)                                  // Maximum length 100
-                .has().uppercase()                              // Must have uppercase letters
-                .has().lowercase()                              // Must have lowercase letters
-                .has().digits(1)                                // Must have at least 1 digits
-                .has().not().spaces();                          // Should not have spaces
-
                 if (this.passwordValidation(this.password) !== true) return false;
                 if (!this.username?.length > 2) return false;
                 if (!EmailValidator.validate(this.email)) return false;
@@ -78,7 +68,7 @@ import * as passwordValidator from 'password-validator';
                     return;
                 }
 
-                axios.post(this.APP_API_URL + 'createUser', {
+                axios.put(this.APP_API_URL + 'createUser', {
                     email: this.email,
                     username: this.username,
                     password: this.password,

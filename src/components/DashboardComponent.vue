@@ -32,25 +32,26 @@
             },
         ],
         passwordRules: [
-          value => {
-            const schema = new passwordValidator();
-
-            schema
-            .is().min(8)                                    // Minimum length 8
-            .is().max(100)                                  // Maximum length 100
-            .has().uppercase()                              // Must have uppercase letters
-            .has().lowercase()                              // Must have lowercase letters
-            .has().digits(1)                                // Must have at least 1 digits
-            .has().not().spaces()                           // Should not have spaces
-
-            if (schema.validate(value)) return true;
-
-            return 'Password should be 8 characters long, at least 1 digit, 1 uppercase and lowercase letter, no spaces'
-          },
+            value => { this.passwordValidation(value) }
         ],
       }
     },
     methods: {
+      passwordValidation(value) {
+        const schema = new passwordValidator();
+
+        schema
+        .is().min(8)                                    // Minimum length 8
+        .is().max(100)                                  // Maximum length 100
+        .has().uppercase()                              // Must have uppercase letters
+        .has().lowercase()                              // Must have lowercase letters
+        .has().digits(1)                                // Must have at least 1 digits
+        .has().not().spaces()                           // Should not have spaces
+
+        if (schema.validate(value)) return true;
+
+        return 'Password should be 8 characters long, at least 1 digit, 1 uppercase and lowercase letter, no spaces'
+      },
       getBooks() {
         if(this.user) {
           const cookie = this.cookies.get("user");
@@ -151,6 +152,11 @@
       },
       changePassword() {
         const cookie = this.cookies.get("user");
+
+        if(!this.passwordValidation(this.newPassword)) {
+          this.$store.commit('errorAlert', this.passwordValidation(this.newPassword));
+          return;
+        }
 
         axios.post(this.APP_API_URL + 'changePassword', {
           username: cookie.username,
