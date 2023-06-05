@@ -51,7 +51,7 @@ export default {
 			this.$emit('editBook', this.keyId, this.readState);
 		},
 		addBook() {
-			this.$emit('addBook', this.keyId);
+			this.$emit('addBook', this.keyId, false);
 		},
 		deleteBook() {
 			this.$emit('deleteBook', this.keyId);
