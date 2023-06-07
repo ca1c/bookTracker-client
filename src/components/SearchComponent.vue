@@ -22,6 +22,7 @@ export default {
       API_KEY: "",
       API_URL: "",
       snackbar: false,
+      snackbarText: "Book Added To Your Library.",
       timeout: 2000,
       loading: false,
       customBookForm: false,
@@ -70,27 +71,35 @@ export default {
     addBook(i, custom) {
       let user = this.cookies.get("user");
       let book = this.books[i] ?? null;
-      if(user.username) {
-        axios.put(this.APP_API_URL + 'addBook', {
-          username: user.username,
-          title: custom ? this.customBook.title : book.volumeInfo.title,
-          author: custom ? this.customBook.author : book.volumeInfo.authors[0],
-          image: custom ? "http://books.google.com/books/content?id=4rtEPQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api" : book.volumeInfo.imageLinks.thumbnail,
-          pageCount: custom ? this.customBook.pageCount : book.volumeInfo.pageCount,
-          read: "0",
-          session: user.id,
-        })
-        .then((response) => {
-          console.log(response);
-          this.showAlert("Book Added!");
-        })
-        .catch((err) => {
-          console.log(err);
-        })
+      if(!user.username) {
+        return;
       }
+      axios.put(this.APP_API_URL + 'addBook', {
+        username: user.username,
+        title: custom ? this.customBook.title : book.volumeInfo.title,
+        author: custom ? this.customBook.author : book.volumeInfo.authors[0],
+        image: custom ? "http://books.google.com/books/content?id=4rtEPQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api" : book.volumeInfo.imageLinks.thumbnail,
+        pageCount: custom ? this.customBook.pageCount : book.volumeInfo.pageCount,
+        read: "0",
+        session: user.id,
+      })
+      .then((response) => {
+        if(response.data.error) {
+          this.showAlert(response.data.message);
+          return;
+        }
+
+        this.showAlert("Book Added To Your Library.");
+        
+      })
+      .catch((err) => {
+        console.log(err);
+        this.showAlert("Request Error.");
+      })
     },
-    showAlert() {
+    showAlert(text) {
       this.snackbar = true;
+      this.snackbarText = text;
     }
   },
   mounted() {
@@ -143,7 +152,7 @@ export default {
       v-model="snackbar"
       :timeout="timeout"
     >
-      Book Added To Your Library.
+      {{ this.snackbarText }}
 
       <template v-slot:actions>
         <v-btn
