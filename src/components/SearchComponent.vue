@@ -71,7 +71,7 @@ export default {
     addBook(i, custom) {
       const user = this.cookies.get("user");
       const book = this.books[i] ?? null;
-      const imageId = book.volumeInfo.imageLinks.thumbnail.split('=')[1] ?? null;
+      const imageId = book.volumeInfo.imageLinks.thumbnail.split('=')[1] ?? "4rtEPQAACAAJ";
       if(!user.username) {
         return;
       }
