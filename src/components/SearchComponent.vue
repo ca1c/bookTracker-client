@@ -71,7 +71,7 @@ export default {
     addBook(i, custom) {
       const user = this.cookies.get("user");
       const book = this.books[i] ?? null;
-      const imageId = book.volumeInfo.imageLinks.thumbnail.split('=')[1] ?? "4rtEPQAACAAJ";
+      const imageId = book !== null ? book.volumeInfo.imageLinks.thumbnail : "4rtEPQAACAAJ";
       if(!user.username) {
         return;
       }
@@ -79,7 +79,7 @@ export default {
         username: user.username,
         title: custom ? this.customBook.title : book.volumeInfo.title,
         author: custom ? this.customBook.author : book.volumeInfo.authors[0],
-        image: custom ? "4rtEPQAACAAJ" : imageId,
+        image: custom ? "4rtEPQAACAAJ" : imageId.split('=')[1].split('&')[0],
         pageCount: custom ? this.customBook.pageCount : book.volumeInfo.pageCount,
         read: "0",
         session: user.id,
