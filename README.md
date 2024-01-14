@@ -27,3 +27,12 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Other setup
+
+1. Environment Variables
+
+```
+PORT=8080
+VUE_APP_LOCAL_API_URL=http://localhost:4001/
+```
